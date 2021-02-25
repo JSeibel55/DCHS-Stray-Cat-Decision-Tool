@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+    <head>    
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+        <meta name="keywords" content="Stray Cat Decision Tool"/>
+        <title>DCHS Stray Cat Decision Tool</title>
+        
+        <link rel="stylesheet" href="lib/leaflet/leaflet.css">
+        <link rel="stylesheet" href="lib/bootstrap-4.6.0/css/bootstrap.min.css">
+
+        <link rel="stylesheet" href="css/style.css">
+        
+    </head>
+    <body>
+        <!-- Header Navbar -->
+        <header>
+            <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
+                <a class="navbar-brand active" style="color: white">DCHS Stray Cat Decision Tool</a>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="">About</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="https://www.giveshelter.org/">DCHS</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+
+        <!-- Mobil Modal -->
+        <div class="modal fade" id="mobile-screen" tabindex="-1" role="dialog" aria-labelledby="mobile-screen" aria-hidden="true" data-backdrop="static">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                <div class="modal-content" id="mobile-screen-content">
+                    <div class="modal-body">
+                        <h6 style="font-weight: bold;">Please use a laptop or desktop.</h6>
+                        <p>At this time, the Stray Cat Decision Tool is not built to be viewed on a mobile device.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading Screen -->
+        <div id="loadingScreen">
+            <div id="spinner"></div>
+        </div>  
+        <!-- Map -->
+        <div class="conservation-map" id="map" ></div>
+
+        <!--External script links -->
+        <script type="text/javascript" src="lib/jquery-3.5.1.js"></script>
+        <script type="text/javascript" src="lib/bootstrap-4.6.0/js/bootstrap.bundle.min.js"></script>
+        <script type="text/javascript" src="lib/leaflet/leaflet.js"></script>
+        <script type="text/javascript" src="lib/leaflet/easy-button.js"></script>
+        
+        <script type="text/javascript" src="js/main.js"></script>
+    </body>
+</html>
