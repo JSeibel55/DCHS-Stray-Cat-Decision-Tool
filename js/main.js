@@ -1,17 +1,40 @@
 //Global Variables
 var map;
 var wildlifeAreaFeatures;
-var eventLngLat;
-var catLocation = null;
-var catAreaBig = null;
-var catAreaSmall = null;
+var catLocation = null; // Location of cat on map
+var catAreaMax = null; // Max cat home range
+var catAreaAvg = null; // Avg cat home range
+var allowCat = false;  // Allow cat location to be put on map, false allows clicking of wildlife areas
 var catIcon = L.icon({
     iconUrl: 'img/cat.png',
-
     iconSize:     [35, 40], // size of the icon
     iconAnchor:   [20, 30], // point of the icon which will correspond to marker's location
-    popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
 });
+// Styles for Features
+var style = {
+    'countyStyle' : {
+        fillColor: "none",
+        weight: 2,
+        opacity: 1,
+        color: 'black',
+        fillOpacity: 0.7
+    },
+    'catAreaMaxStyle' : {
+        fillColor: 'gray',
+        weight: 1,
+        opacity: 1,
+        dashArray: '5, 6',
+        color: 'black',
+        fillOpacity: .2
+    },
+    'catAreaAvgStyle' : {
+        fillColor: 'gray',
+        weight: 1,
+        opacity: 1,
+        color: 'red',
+        fillOpacity: .2
+    }
+}
 
 ///// Functions for Map /////
 //Function to instantiate the Leaflet map
@@ -63,6 +86,20 @@ function createMap(){
     var overlays = {};
     L.control.layers(basemaps, overlays, {position: 'bottomright'}).addTo(map);
 
+    // Sidebar
+    var sidebar = L.control({position: 'topleft'});
+	sidebar.onAdd = function (map) {
+		this._div = L.DomUtil.create('div', 'sidebar');
+        this._div.innerHTML = '<p id="instruction"><b>Add a cat to the map to assess risk to sensitive wildlife areas<br></p>'; 
+        this._div.innerHTML += '<button type="button" class="btn btn-primary addCat">Add Cat</button>';
+        this._div.innerHTML += '<button type="button" class="btn btn-primary removeCat" disabled>Remove Cat</button><br>';
+        this._div.innerHTML += '<button type="button" class="btn btn-success assessCat" disabled>Assess Cat</button>';
+       
+
+		return this._div;
+	};
+    sidebar.addTo(map);
+
     // Add data layers to the map
     // addCounties(map);
     addWildlifeAreas(map);
@@ -76,7 +113,7 @@ function addCounties(map){
     //Create the county boundaries
     $.getJSON("data/County_Boundaries.json", function(response){
         mapFeatures = L.geoJson(response, {
-            style: county_style,
+            style: style.countyStyle,
         }).addTo(map);
     });
 }
@@ -108,16 +145,7 @@ function addHistoricalCats(map){
     
 }
 
-//Set style for Counties
-function county_style() {
-    return {
-        fillColor: "none",
-        weight: 2,
-        opacity: 1,
-        color: 'black',
-        fillOpacity: 0.7
-    }
-};
+
 //Set style for Wildlife Areas
 function wildlife_area_style(feature) {
     return {
@@ -145,17 +173,19 @@ function onEachFeature(feature, layer) {
 }
 //Highlight polygon feature
 function highlightFeature(e) {
-    var layer = e.target;
+    if (allowCat == false) {
+        var layer = e.target;
 
-    layer.setStyle({
-        weight: 3,
-        color: 'black',
-        dashArray: '',
-        fillOpacity: .8
-    });
+        layer.setStyle({
+            weight: 3,
+            color: 'black',
+            dashArray: '',
+            fillOpacity: .8
+        });
 
-    if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
-        layer.bringToFront();
+        if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+            layer.bringToFront();
+        }
     }
 }
 //Remove polygon feature highlight
@@ -164,15 +194,17 @@ function resetHighlight(e) {
 }
 // Creates and activates a popup for the polygon feature
 function polyPopup(e) {
-    var poly = e.target.feature;
+    if (allowCat == false) {
+        var poly = e.target.feature;
 
-    //Create the popup content for the combined dataset layer
-    var popupContent = createPopupContent(poly.properties);
+        //Create the popup content for the combined dataset layer
+        var popupContent = createPopupContent(poly.properties);
 
-    //bind the popup to the polygon
-    e.target.bindPopup(popupContent, {
-        offset: new L.Point(0,0)
-    }).openPopup();
+        //bind the popup to the polygon
+        e.target.bindPopup(popupContent, {
+            offset: new L.Point(0,0)
+        }).openPopup();
+    }
 }
 // Creates text for the popups in the prop symbols
 function createPopupContent(properties, attribute){
@@ -193,7 +225,10 @@ function createPopupContent(properties, attribute){
 function addMarker(e){
     if (catLocation != null) {
         map.removeLayer(catLocation);
+        $('.removeCat').prop("disabled", false);
+        $('.assessCat').prop("disabled", false);
     }
+
     catLocation = new L.marker(e.latlng, {icon: catIcon}).addTo(map);
 }
 
@@ -207,39 +242,46 @@ function makeRadius(lngLatArray, radiusInMeters){
 function showBuffer(e) {
     eventLngLat = [e.latlng.lng, e.latlng.lat];
 
-    if (catAreaBig != null) {
-        map.removeLayer(catAreaBig);
-        map.removeLayer(catAreaSmall);
+    if (catAreaMax != null) {
+        map.removeLayer(catAreaMax);
+        map.removeLayer(catAreaAvg);
     }
 
-    catAreaBig = L.geoJson(makeRadius(eventLngLat, 1200), {
-        style: {
-            fillColor: 'gray',
-            weight: 1,
-            opacity: 1,
-            dashArray: '5, 6',
-            color: 'black',
-            fillOpacity: .2
-        }
+    catAreaMax = L.geoJson(makeRadius(eventLngLat, 1200), {
+        style: style.catAreaMaxStyle
     }).addTo(map);
-    catAreaSmall = L.geoJson(makeRadius(eventLngLat, 400), {
-        style: {
-            fillColor: 'gray',
-            weight: 1,
-            opacity: 1,
-            color: 'red',
-            fillOpacity: .2
-        }
+    catAreaAvg = L.geoJson(makeRadius(eventLngLat, 400), {
+        style: style.catAreaAvgStyle
     }).addTo(map);
 }
+
 
 //Create Map
 $(document).ready(createMap());
 
-//Click event goes here!
-map.on('click', function(e) {
-    eventLngLat = [e.latlng.lng, e.latlng.lat];
-    addMarker(e);
-    showBuffer(e);
+// Click Events for Buttons
+$('.addCat').on('click', function(){
+    allowCat = true;
+});
+$('.removeCat').on('click', function(){
+    allowCat = false;
+    $('.removeCat').prop("disabled", true);
+    $('.assessCat').prop("disabled", true);
 
+    map.removeLayer(catLocation);
+    map.removeLayer(catAreaMax);
+    map.removeLayer(catAreaAvg);
+    catLocation = null;
+});
+$('.assessCat').on('click', function(){
+    allowCat = false;
+    $('.addCat').prop("disabled", false);
+});
+
+// Map click
+map.on('click', function(e) {
+    if(allowCat == true){
+        addMarker(e);
+        showBuffer(e);
+    }
 });

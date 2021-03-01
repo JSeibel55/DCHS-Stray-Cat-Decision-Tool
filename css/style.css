@@ -3,14 +3,38 @@ body{
 }
 
 /*** Primary Containers ***/
-
-
 #map {
-    position: absolute;
-    bottom:0;
-    left:0;
-    width: 100%;
+  position: absolute;
+  bottom:0;
+  left:0;
+  width: 100%;
 	height: calc(100% - 56px);
+}
+
+.sidebar.leaflet-control {
+	position: fixed;
+	padding: 5px 20px 5px 20px;
+	font: 20px/22px Arial, Helvetica, sans-serif;
+	background: rgba(255,255,255, 1);
+	box-shadow: 0 0 15px rgba(0,0,0,0.2);
+	border-radius: 5px;
+	text-align:left;
+	left:0px;
+	top: calc(100% - 56px) + 5px;
+  width: 20%;
+}
+/* Styling within sidebar */
+#instruction {
+  margin: 5px 0 30px 0;
+}
+.addCat {
+  margin: 10px 1px 0 1px;
+}
+.removeCat {
+  margin: 10px 1px 0 1px;
+}
+.assessCat {
+  margin: 20px 1px 10px 1px;
 }
 
 /* Popup Info */
