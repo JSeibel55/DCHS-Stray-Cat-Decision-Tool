@@ -15,12 +15,12 @@ body{
 
 /* Popup Info */
 .popup-feature-name {
-    font-size: 15px;
-    line-height: 15px;
+    font-size: 22px;
+    line-height: 20px;
 }
 .popup-detail {
-font-size: 12px;
-line-height: 10px;
+    font-size: 14px;
+    line-height: 2px;
 }
 
 /*** L.easyButton ***/

@@ -1,10 +1,17 @@
 //Global Variables
 var map;
-var buttons = [
-    L.easyButton('<img src="img/noun_Home_731233_blk.svg">', function(){
-        map.setView([43.05,-89.4], 10);
-    },'zoom to original extent',{ position: 'topleft' }),
-];
+var wildlifeAreaFeatures;
+var eventLngLat;
+var catLocation = null;
+var catAreaBig = null;
+var catAreaSmall = null;
+var catIcon = L.icon({
+    iconUrl: 'img/cat.png',
+
+    iconSize:     [35, 40], // size of the icon
+    iconAnchor:   [20, 30], // point of the icon which will correspond to marker's location
+    popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+});
 
 ///// Functions for Map /////
 //Function to instantiate the Leaflet map
@@ -19,12 +26,22 @@ function createMap(){
         minZoom: 8,
         maxZoom: 18,
         maxBounds:bounds,
-        zoomControl: true,
+        zoomControl: false,
         tap:false,
     })
+    
+    // Add zoom control (but in top right)
+    L.control.zoom({
+        position: 'topright'
+    }).addTo(map);
+    // Add Home button
+    L.easyButton('<img src="img/home.svg">', function(){
+        map.setView([43.05,-89.4], 10);
+    },'zoom to original extent',{ position: 'topright' }).addTo(map);
+    // Add scale bar
     L.control.scale().addTo(map);
-    L.easyBar(buttons).addTo(map);
 
+    // Basemaps
     var mapboxBasemap = L.tileLayer('https://api.mapbox.com/styles/v1/jseibel55/ckjvkh5o70q9y1aukajmy8pwx/tiles/256/{z}/{x}/{y}@2x?access_token={accessToken}', {
         attribution: '<a href="https://www.mapbox.com/">Mapbox</a>',
         accessToken: 'pk.eyJ1IjoianNlaWJlbDU1IiwiYSI6ImNrNmpxc3pzYTAwZXIzanZ4Nm5scHAzam0ifQ.5NLBHlevG0PL-E13Yax9NA'
@@ -37,25 +54,24 @@ function createMap(){
         accessToken: 'pk.eyJ1IjoianNlaWJlbDU1IiwiYSI6ImNrNmpxc3pzYTAwZXIzanZ4Nm5scHAzam0ifQ.5NLBHlevG0PL-E13Yax9NA'
     });
 
-
     // //Create basemap group for control panel
 	var basemaps = {
         'Streets Color': mapboxBasemap,
         'Streets Gray': openStreetsGrayBasemap,
         'Satellite': satelliteBasemap,
     }
-
     var overlays = {};
-    L.control.layers(basemaps, overlays).addTo(map);
+    L.control.layers(basemaps, overlays, {position: 'bottomright'}).addTo(map);
 
     // Add data layers to the map
-    addCounties(map);
+    // addCounties(map);
     addWildlifeAreas(map);
     addIBA(map);
-    // addCatData(map);
+    // addHistoricalCats(map);
+
 };
 
-// Add county areas layer
+// Add counties
 function addCounties(map){
     //Create the county boundaries
     $.getJSON("data/County_Boundaries.json", function(response){
@@ -65,18 +81,19 @@ function addCounties(map){
     });
 }
 
-// Add wildlife ares layer
+// Add wildlife areas
 function addWildlifeAreas(map){
     //Create the county boundaries
     $.getJSON("data/Wildlife_Areas.json", function(response){
-        mapFeatures = L.geoJson(response, {
+        wildlifeData = response;
+        wildlifeAreaFeatures = L.geoJson(response, {
             style: wildlife_area_style,
             onEachFeature: onEachFeature
         }).addTo(map);
     });
 }
 
-// Add important bird ares layer
+// Add important bird areas
 function addIBA(map){
     // load GeoJSON file
     $.getJSON("data/Important_Bird_Areas.json",function(data){
@@ -85,6 +102,13 @@ function addIBA(map){
     });
 }
 
+// Add historical cat surrender locations
+function addHistoricalCats(map){
+    // load GeoJSON file
+    
+}
+
+//Set style for Counties
 function county_style() {
     return {
         fillColor: "none",
@@ -94,6 +118,7 @@ function county_style() {
         fillOpacity: 0.7
     }
 };
+//Set style for Wildlife Areas
 function wildlife_area_style(feature) {
     return {
         fillColor: getRiskColor(feature.properties.WILD_LVL),
@@ -103,6 +128,7 @@ function wildlife_area_style(feature) {
         fillOpacity: 0.7
     }
 };
+// Set color gradient for Wildlife Areas
 function getRiskColor(lvl) {
     return lvl == 3 ? '#800026' :
            lvl == 2 ? '#FD8D3C' :
@@ -122,10 +148,10 @@ function highlightFeature(e) {
     var layer = e.target;
 
     layer.setStyle({
-        weight: 1,
+        weight: 3,
         color: 'black',
         dashArray: '',
-        fillOpacity: 1
+        fillOpacity: .8
     });
 
     if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
@@ -134,7 +160,7 @@ function highlightFeature(e) {
 }
 //Remove polygon feature highlight
 function resetHighlight(e) {
-    mapFeatures.resetStyle(e.target);
+    wildlifeAreaFeatures.resetStyle(e.target);
 }
 // Creates and activates a popup for the polygon feature
 function polyPopup(e) {
@@ -163,5 +189,57 @@ function createPopupContent(properties, attribute){
     return popupContent;
 }
 
+// Add marker to map at click location
+function addMarker(e){
+    if (catLocation != null) {
+        map.removeLayer(catLocation);
+    }
+    catLocation = new L.marker(e.latlng, {icon: catIcon}).addTo(map);
+}
+
+// Calculate buffer around cat location
+function makeRadius(lngLatArray, radiusInMeters){
+    var point = turf.point(lngLatArray)
+    var buffered = turf.buffer(point, radiusInMeters, { units: 'meters' });
+    return buffered;
+}
+// Show and style the buffer around a cat location
+function showBuffer(e) {
+    eventLngLat = [e.latlng.lng, e.latlng.lat];
+
+    if (catAreaBig != null) {
+        map.removeLayer(catAreaBig);
+        map.removeLayer(catAreaSmall);
+    }
+
+    catAreaBig = L.geoJson(makeRadius(eventLngLat, 1200), {
+        style: {
+            fillColor: 'gray',
+            weight: 1,
+            opacity: 1,
+            dashArray: '5, 6',
+            color: 'black',
+            fillOpacity: .2
+        }
+    }).addTo(map);
+    catAreaSmall = L.geoJson(makeRadius(eventLngLat, 400), {
+        style: {
+            fillColor: 'gray',
+            weight: 1,
+            opacity: 1,
+            color: 'red',
+            fillOpacity: .2
+        }
+    }).addTo(map);
+}
+
 //Create Map
 $(document).ready(createMap());
+
+//Click event goes here!
+map.on('click', function(e) {
+    eventLngLat = [e.latlng.lng, e.latlng.lat];
+    addMarker(e);
+    showBuffer(e);
+
+});
