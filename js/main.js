@@ -1,10 +1,15 @@
 //Global Variables
 var map;
 var wildlifeAreaFeatures;
+var riskValue = null; // Highest level assessed for the location
+var areasWithin1200 = []; // List of wildlife areas within 1200 m at risk due to cats location
+var areasWithin400 = []; // List of wildlife areas within 400 m at risk due to cats location
 var catLocation = null; // Location of cat on map
-var catAreaMax = null; // Max cat home range
-var catAreaAvg = null; // Avg cat home range
-var allowCat = false;  // Allow cat location to be put on map, false allows clicking of wildlife areas
+var catAreaMax = null; // Visual Feature of max cat home range
+var catAreaMaxPoly = null; // Polygon of max cat home range
+var catAreaAvg = null; // Visual Feature of avg cat home range
+var catAreaAvgPoly = null; // Polygon of avg cat home range
+var allowLoc = false;  // Allow cat location to be put on map, false allows clicking of wildlife areas
 var catIcon = L.icon({
     iconUrl: 'img/cat.png',
     iconSize:     [35, 40], // size of the icon
@@ -94,11 +99,20 @@ function createMap(){
         this._div.innerHTML += '<button type="button" class="btn btn-primary addCat">Add Cat</button>';
         this._div.innerHTML += '<button type="button" class="btn btn-primary removeCat" disabled>Remove Cat</button><br>';
         this._div.innerHTML += '<button type="button" class="btn btn-success assessCat" disabled>Assess Cat</button>';
-       
 
 		return this._div;
 	};
     sidebar.addTo(map);
+    // // Results
+    // var results = L.control({position: 'bottomleft'});
+	// results.onAdd = function (map) {
+	// 	this._div = L.DomUtil.create('div', 'results');
+    //     this._div.innerHTML = '<p id="results-title"><b>Results<br></p>'; 
+    //     this._div.innerHTML += 'the info...<br>';
+       
+	// 	return this._div;
+	// };
+    // results.addTo(map);
 
     // Add data layers to the map
     // addCounties(map);
@@ -160,7 +174,7 @@ function wildlife_area_style(feature) {
 function getRiskColor(lvl) {
     return lvl == 3 ? '#800026' :
            lvl == 2 ? '#FD8D3C' :
-                     '#FFEDA0' ;
+                      '#FFEDA0' ;
 }
 
 //Event listeners for highlighing the polygon features
@@ -173,7 +187,7 @@ function onEachFeature(feature, layer) {
 }
 //Highlight polygon feature
 function highlightFeature(e) {
-    if (allowCat == false) {
+    if (allowLoc == false) {
         var layer = e.target;
 
         layer.setStyle({
@@ -194,7 +208,7 @@ function resetHighlight(e) {
 }
 // Creates and activates a popup for the polygon feature
 function polyPopup(e) {
-    if (allowCat == false) {
+    if (allowLoc == false) {
         var poly = e.target.feature;
 
         //Create the popup content for the combined dataset layer
@@ -247,12 +261,127 @@ function showBuffer(e) {
         map.removeLayer(catAreaAvg);
     }
 
-    catAreaMax = L.geoJson(makeRadius(eventLngLat, 1200), {
+    catAreaMaxPoly = makeRadius(eventLngLat, 1200);
+    catAreaMax = L.geoJson(catAreaMaxPoly, {
         style: style.catAreaMaxStyle
     }).addTo(map);
-    catAreaAvg = L.geoJson(makeRadius(eventLngLat, 400), {
+    catAreaAvgPoly = makeRadius(eventLngLat, 400);
+    catAreaAvg = L.geoJson(catAreaAvgPoly, {
         style: style.catAreaAvgStyle
     }).addTo(map);
+}
+
+// Store highest risk value assessment after comparing to current saved
+function storeRisk(current) {
+    if (riskValue == null || riskValue < current) {
+        riskValue = current;
+    }
+}
+// 
+function addToRiskList(area, distance) {
+    if (distance == 400) {
+        if (areasWithin400.indexOf(area) === -1) {
+            areasWithin400.push(area)
+        }
+    }
+    else {
+        if (areasWithin400.indexOf(area) === -1 && areasWithin1200.indexOf(area) === -1) {
+            areasWithin1200.push(area)
+        }
+    }
+}
+
+// Check if buffer and wildlife areas intersect, if they do assess the area
+function checkIntersection() {
+    // console.log(wildlifeAreas.features[0].properties.NAME)
+    // console.log(wildlifeAreas.features[0].geometry.coordinates)
+
+    // Loop through every wildlife area
+    for (each in wildlifeAreas.features) {
+        var wildlifeArea = wildlifeAreas.features[each].geometry
+
+        // Check if within 400 meters of High Sensitive Area (lvl 3)
+        if (turf.booleanIntersects(catAreaAvgPoly, wildlifeArea) == true && wildlifeAreas.features[each].properties.RISK_LVL == "High") {
+            storeRisk(3)
+            addToRiskList(wildlifeAreas.features[each].properties, 400);
+        }
+        // Check if within 1200 meters of High Sensitive Area (lvl 3)
+        else if (turf.booleanIntersects(catAreaMaxPoly, wildlifeArea) == true && wildlifeAreas.features[each].properties.RISK_LVL == "High") {
+            storeRisk(3)
+            addToRiskList(wildlifeAreas.features[each].properties, 1200);
+        }
+        // Check if within 400 meters of Medium Sensitive Area (lvl 2)
+        else if (turf.booleanIntersects(catAreaAvgPoly, wildlifeArea) == true && wildlifeAreas.features[each].properties.RISK_LVL == "Medium") {
+            storeRisk(3)
+            addToRiskList(wildlifeAreas.features[each].properties, 400);
+        }
+        // Check if within 1200 meters of Medium Sensitive Area (lvl 2)
+        else if (turf.booleanIntersects(catAreaMaxPoly, wildlifeArea) == true && wildlifeAreas.features[each].properties.RISK_LVL == "Medium") {
+            storeRisk(2)
+            addToRiskList(wildlifeAreas.features[each].properties, 1200);
+        }
+        // Check if within 400 meters of Low Sensitive Area (lvl 1)
+        else if (turf.booleanIntersects(catAreaAvgPoly, wildlifeArea) == true && wildlifeAreas.features[each].properties.RISK_LVL == "Low") {
+            storeRisk(2)
+            addToRiskList(wildlifeAreas.features[each].properties, 400);
+        }
+        // Check if within 1200 meters of Low Sensitive Area (lvl 1)
+        else if (turf.booleanIntersects(catAreaMaxPoly, wildlifeArea) == true && wildlifeAreas.features[each].properties.RISK_LVL == "Low") {
+            storeRisk(1)
+            addToRiskList(wildlifeAreas.features[each].properties, 1200);
+        }
+        else {
+            storeRisk(1)
+        }
+    }
+}
+
+// Create window to display the risk assessment and the nearby wildlife areas
+function reportAssessment() {
+    if (riskValue == 3) {
+        $('body').append('<div class="results"><p id="results-title"><b>This location is a <span style="color:#800026">HIGH RISK</span> to wildlife</b></p><p id="results-list"</p></div>');
+        console.log("Areas within 400 meters: ")
+        for (each in areasWithin400) {
+            console.log(areasWithin400[each]);
+        }
+        console.log("Areas within 1200 meters: ")
+        for (each in areasWithin1200) {
+            console.log(areasWithin1200[each]);
+        }
+    } else if (riskValue == 2) {
+        $('body').append('<div class="results"><p id="results-title"><b>This location is a <span style="color:#FD8D3C">MEDIUM RISK</span> to wildlife</b></p><p id="results-list"</p></div>');
+        console.log("Areas within 400 meters: ")
+        for (each in areasWithin400) {
+            console.log(areasWithin400[each]);
+        }
+        console.log("Areas within 1200 meters: ")
+        for (each in areasWithin1200) {
+            console.log(areasWithin1200[each]);
+        }
+    } else {
+        $('body').append('<div class="results"><p id="results-title"><b>This location is a <span style="color:#FFEDA0">LOW RISK</span> to wildlife</b></p><p id="results-list"</p></div>');
+        console.log("Areas within 400 meters: ")
+        for (each in areasWithin400) {
+            console.log(areasWithin400[each]);
+        }
+        console.log("Areas within 1200 meters: ")
+        for (each in areasWithin1200) {
+            console.log(areasWithin1200[each]);
+        }
+    }
+    $('#results-list').append('<span style="text-decoration: underline">Areas within 400 meters:</span><br>');
+    for (each in areasWithin400) {
+        $('#results-list').append(areasWithin400[each].NAME + '<br>');
+    }
+    $('#results-list').append('<span style="text-decoration: underline">Areas within 1200 meters:</span><br>');
+    for (each in areasWithin1200) {
+        $('#results-list').append(areasWithin1200[each].NAME + '<br>');
+    }
+    $('#results-list').append('</p>');
+
+    riskValue = null;
+    areasWithin1200 = [];
+    areasWithin400 = [];
 }
 
 
@@ -261,10 +390,10 @@ $(document).ready(createMap());
 
 // Click Events for Buttons
 $('.addCat').on('click', function(){
-    allowCat = true;
+    allowLoc = true;
 });
 $('.removeCat').on('click', function(){
-    allowCat = false;
+    allowLoc = false;
     $('.removeCat').prop("disabled", true);
     $('.assessCat').prop("disabled", true);
 
@@ -272,15 +401,20 @@ $('.removeCat').on('click', function(){
     map.removeLayer(catAreaMax);
     map.removeLayer(catAreaAvg);
     catLocation = null;
+
+    $( ".results" ).remove();
 });
 $('.assessCat').on('click', function(){
-    allowCat = false;
+    allowLoc = false;
     $('.addCat').prop("disabled", false);
+
+    checkIntersection();
+    reportAssessment();
 });
 
 // Map click
 map.on('click', function(e) {
-    if(allowCat == true){
+    if(allowLoc == true){
         addMarker(e);
         showBuffer(e);
     }

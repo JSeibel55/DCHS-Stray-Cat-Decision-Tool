@@ -9,8 +9,10 @@ body{
   left:0;
   width: 100%;
 	height: calc(100% - 56px);
+  z-index: 1;
 }
 
+/** Sidebar **/
 .sidebar.leaflet-control {
 	position: fixed;
 	padding: 5px 20px 5px 20px;
@@ -21,7 +23,7 @@ body{
 	text-align:left;
 	left:0px;
 	top: calc(100% - 56px) + 5px;
-  width: 20%;
+  width: 20vw;
 }
 /* Styling within sidebar */
 #instruction {
@@ -35,6 +37,27 @@ body{
 }
 .assessCat {
   margin: 20px 1px 10px 1px;
+}
+/** Results **/
+.results {
+  z-index: 2;
+	position: absolute;
+	padding: 10px 20px 5px 20px;
+	font: 18px/20px Arial, Helvetica, sans-serif;
+	background: rgba(255,255,255, 1);
+	box-shadow: 0 0 15px rgba(0,0,0,0.2);
+	border-radius: 2px;
+	text-align:left;
+	left: 2.5vw;
+	bottom: 0;
+  width: 95vw;
+}
+#results-title {
+  font-size: 22px;
+}
+#results-list {
+  max-height: 25vh;
+  overflow: auto;
 }
 
 /* Popup Info */
