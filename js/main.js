@@ -280,7 +280,7 @@ function storeRisk(current) {
         riskValue = current;
     }
 }
-// 
+// Store each wildlife area that is within a certain distance to corresponding list if that area does not already exist in the list
 function addToRiskList(area, distance) {
     if (distance == 400) {
         if (areasWithin400.indexOf(area) === -1) {
@@ -434,5 +434,17 @@ map.on('click', function(e) {
     if(allowLoc == true){
         addMarker(e);
         showBuffer(e);
+    }
+});
+
+// Open popup warning to view on desktop if user opens in mobile
+// Otherwise Splash Screen when start
+$(window).on("resize load", function () {
+    if ($( window ).width() <= 600) {
+        $('#mobile-screen').modal('show');
+        $('#splash-screen').modal('hide');
+    } else if ($( window ).width() > 600){
+        $('#mobile-screen').modal('hide');
+        $('#splash-screen').modal('show');
     }
 });
