@@ -230,7 +230,10 @@ function createPopupContent(properties, attribute){
     popupContent += "<p class='popup-detail'>Organization Type: <b>" + properties.ORG_TYPE + "</b></p>";
     popupContent += "<p class='popup-detail'>Use Type: <b>" + properties.USE_TYPE + "</b></p>";
     popupContent += "<p class='popup-detail'>Wildlife Sensitivity Level: <b>"+ properties.RISK_LVL + "</b></p>";
-    popupContent += "<p class='popup-detail'>More Info: <b><a href="+ properties.WEBSITE +" target='_blank'> Website </a></b></p>";
+    if (properties.WEBSITE.length > 0) {
+        popupContent += "<p class='popup-detail'>More Info: <b><a href="+ properties.WEBSITE +" target='_blank'> Website </a></b></p>";
+    }
+    
 
     return popupContent;
 }
@@ -293,9 +296,6 @@ function addToRiskList(area, distance) {
 
 // Check if buffer and wildlife areas intersect, if they do assess the area
 function checkIntersection() {
-    // console.log(wildlifeAreas.features[0].properties.NAME)
-    // console.log(wildlifeAreas.features[0].geometry.coordinates)
-
     // Loop through every wildlife area
     for (each in wildlifeAreas.features) {
         var wildlifeArea = wildlifeAreas.features[each].geometry
@@ -339,57 +339,72 @@ function checkIntersection() {
 // Create window to display the risk assessment and the nearby wildlife areas
 function reportAssessment() {
     if (riskValue == 3) {
-        $('body').append('<div class="results"><p id="results-title"><b>This location is a <span style="color:#800026">HIGH RISK</span> to wildlife</b></p><p id="results-list"</p></div>');
-        console.log("Areas within 400 meters: ")
-        for (each in areasWithin400) {
-            console.log(areasWithin400[each]);
-        }
-        console.log("Areas within 1200 meters: ")
-        for (each in areasWithin1200) {
-            console.log(areasWithin1200[each]);
-        }
+        $('body').append('<div class="results"> \
+            <div><p id="results-title"><b>This location is a <span style="color:#800026">HIGH RISK</span> to wildlife</b></p><div> \
+            <div class="results-table"></div></div>');
     } else if (riskValue == 2) {
-        $('body').append('<div class="results"><p id="results-title"><b>This location is a <span style="color:#FD8D3C">MEDIUM RISK</span> to wildlife</b></p><p id="results-list"</p></div>');
-        console.log("Areas within 400 meters: ")
-        for (each in areasWithin400) {
-            console.log(areasWithin400[each]);
-        }
-        console.log("Areas within 1200 meters: ")
-        for (each in areasWithin1200) {
-            console.log(areasWithin1200[each]);
-        }
+        $('body').append('<div class="results"> \
+            <div><p id="results-title"><b>This location is a <span style="color:#FD8D3C">MEDIUM RISK</span> to wildlife</b></p><div> \
+            <div class="results-table"></div></div>');
     } else {
-        $('body').append('<div class="results"><p id="results-title"><b>This location is a <span style="color:#FFEDA0">LOW RISK</span> to wildlife</b></p><p id="results-list"</p></div>');
-        console.log("Areas within 400 meters: ")
-        for (each in areasWithin400) {
-            console.log(areasWithin400[each]);
-        }
-        console.log("Areas within 1200 meters: ")
-        for (each in areasWithin1200) {
-            console.log(areasWithin1200[each]);
-        }
+        $('body').append('<div class="results"> \
+            <div><p id="results-title"><b>This location is a <span style="color:#FFEDA0">LOW RISK</span> to wildlife</b></p><div> \
+            <div class="results-table"></div></div>');
     }
-    $('#results-list').append('<span style="text-decoration: underline">Areas within 400 meters:</span><br>');
-    for (each in areasWithin400) {
-        $('#results-list').append(areasWithin400[each].NAME + '<br>');
+    
+    if (areasWithin400.length > 0) {
+        $('.results-table').append('<span style="text-decoration: underline">Areas within 400 meters (~0.25 miles):</span><br>');
+        createResultsTable(areasWithin400);
     }
-    $('#results-list').append('<span style="text-decoration: underline">Areas within 1200 meters:</span><br>');
-    for (each in areasWithin1200) {
-        $('#results-list').append(areasWithin1200[each].NAME + '<br>');
+    if (areasWithin1200.length > 0) {
+        $('.results-table').append('<br><span style="text-decoration: underline">Areas within 1200 meters (~0.75 miles):</span><br>');
+        createResultsTable(areasWithin1200);
     }
-    $('#results-list').append('</p>');
 
     riskValue = null;
     areasWithin1200 = [];
     areasWithin400 = [];
 }
+// Creates the table of the nearby wildlife areas
+function createResultsTable(withinList, location) {
+    var tableH = ["Name", "Owner", "Organization Type", "Use Type", "Wildlife Sensitivity Level", "Website"]
+    var table = document.createElement("table");
 
+    var tr = table.insertRow(-1);
+    for (var i = 0; i < tableH.length; i++) {
+        var th = document.createElement("th");      // TABLE HEADER.
+        th.innerHTML = tableH[i];
+        tr.appendChild(th);
+    }
+    for (each in withinList) {
+        tr = table.insertRow(-1);
+        var tabCell = tr.insertCell(-1);
+        tabCell.innerHTML = withinList[each].NAME;
+        tabCell = tr.insertCell(-1);
+        tabCell.innerHTML = withinList[each].OWNER;
+        tabCell = tr.insertCell(-1);
+        tabCell.innerHTML = withinList[each].ORG_TYPE;
+        tabCell = tr.insertCell(-1);
+        tabCell.innerHTML = withinList[each].USE_TYPE;
+        tabCell = tr.insertCell(-1);
+        tabCell.innerHTML = withinList[each].RISK_LVL;
+        tabCell = tr.insertCell(-1);
+        tabCell.innerHTML = withinList[each].WEBSITE
+        if (withinList[each].WEBSITE.length > 0) {
+            tabCell.innerHTML = '<a href='+ withinList[each].WEBSITE +' target=_blank> More Info </a></b></p>';
+        }
+    }
+
+    $('.results-table').append(table);
+    $('.results-table').append('<br>');
+}
 
 //Create Map
 $(document).ready(createMap());
 
 // Click Events for Buttons
 $('.addCat').on('click', function(){
+    $( ".results" ).remove();
     allowLoc = true;
 });
 $('.removeCat').on('click', function(){
@@ -405,7 +420,9 @@ $('.removeCat').on('click', function(){
     $( ".results" ).remove();
 });
 $('.assessCat').on('click', function(){
+    $( ".results" ).remove();
     allowLoc = false;
+    $('.assessCat').prop("disabled", true);
     $('.addCat').prop("disabled", false);
 
     checkIntersection();
