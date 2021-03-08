@@ -469,6 +469,11 @@ map.on('click', function(e) {
     }
 });
 
+$('#activate-about').on('click', function(e) {
+    $('#about-screen').modal('show');
+});
+
+
 // Open popup warning to view on desktop if user opens in mobile
 // Otherwise Splash Screen when start
 $(window).on("resize load", function () {

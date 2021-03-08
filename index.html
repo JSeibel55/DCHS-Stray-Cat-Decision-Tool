@@ -20,7 +20,7 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ml-auto">
                         <li class="nav-item">
-                            <a class="nav-link" href="">About</a>
+                            <a class="nav-link" data-toggle="modal" id="activate-about" href="">About</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="https://www.giveshelter.org/">DCHS</a>
@@ -29,6 +29,24 @@
                 </div>
             </nav>
         </header>
+
+        <!-- Modal -->
+        <div class="modal fade" id="about-screen" tabindex="-1" role="dialog" aria-labelledby="about-screen" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                <div class="modal-content" id="about-screen-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">About</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        </div>
+                        <div class="modal-body">
+                        To be filled...
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <!-- Mobil Modal -->
         <div class="modal fade" id="mobile-screen" tabindex="-1" role="dialog" aria-labelledby="mobile-screen" aria-hidden="true" data-backdrop="static">
