@@ -41,6 +41,21 @@ var style = {
     }
 }
 
+//Declare API key and other options for OpenCageData geocoder
+var searchOptions = {
+    key: 'c0a1ea5b826c49e0bdfb6831aa2c00b3',
+    limit: 5, // number of results to be displayed
+    position: 'topright',
+    placeholder: 'Search', // the text in the empty search box
+    errorMessage: 'Nothing found.',
+    showResultIcons: true,
+    collapsed: false,
+    expand: 'click',
+    addResultToMap: false, // if a map marker should be added after the user clicks a result
+    onResultClick: undefined, // callback with result as first parameter
+};
+
+
 ///// Functions for Map /////
 //Function to instantiate the Leaflet map
 function createMap(){
@@ -75,7 +90,7 @@ function createMap(){
         accessToken: 'pk.eyJ1IjoianNlaWJlbDU1IiwiYSI6ImNrNmpxc3pzYTAwZXIzanZ4Nm5scHAzam0ifQ.5NLBHlevG0PL-E13Yax9NA'
     });
     var openStreetsGrayBasemap = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
     }).addTo(map);
     var satelliteBasemap =  L.tileLayer('https://api.mapbox.com/styles/v1/jseibel55/ckl4a4rhl36yk17nqd4wgl8fk/tiles/256/{z}/{x}/{y}@2x?access_token={accessToken}', {
         attribution: '<a href="https://www.mapbox.com/">Mapbox</a>',
@@ -91,11 +106,15 @@ function createMap(){
     var overlays = {};
     L.control.layers(basemaps, overlays, {position: 'bottomright'}).addTo(map);
 
-    // Sidebar
+    // Add Sidebar to map
     var sidebar = L.control({position: 'topleft'});
 	sidebar.onAdd = function (map) {
 		this._div = L.DomUtil.create('div', 'sidebar');
-        this._div.innerHTML = '<p id="instruction"><b>Add a cat to the map to assess risk to sensitive wildlife areas<br></p>'; 
+        this._div.innerHTML = '<p id="instruction"><b>Add a cat to the map to assess risk to sensitive wildlife areas<br></p>';
+        this._div.innerHTML += '<div id="geocoder" class="form-group has-search">\
+                                    <span class="fa fa-search form-control-feedback"></span>\
+                                    <input type="text" class="form-control" placeholder="Search">\
+                                </div>'
         this._div.innerHTML += '<button type="button" class="btn btn-primary addCat">Add Cat</button>';
         this._div.innerHTML += '<button type="button" class="btn btn-primary removeCat" disabled>Remove Cat</button><br>';
         this._div.innerHTML += '<button type="button" class="btn btn-success assessCat" disabled>Assess Cat</button>';
@@ -103,16 +122,22 @@ function createMap(){
 		return this._div;
 	};
     sidebar.addTo(map);
-    // // Results
-    // var results = L.control({position: 'bottomleft'});
-	// results.onAdd = function (map) {
-	// 	this._div = L.DomUtil.create('div', 'results');
-    //     this._div.innerHTML = '<p id="results-title"><b>Results<br></p>'; 
-    //     this._div.innerHTML += 'the info...<br>';
-       
-	// 	return this._div;
-	// };
-    // results.addTo(map);
+
+    // Add place searchbar to map
+    // var searchControl = L.Control.openCageSearch(searchOptions);
+    // searchControl.addTo(map);
+
+
+    // Call the getContainer routine.
+    // var htmlObject = searchControl.getContainer();
+    // // Get the desired parent node.
+    // var newControlLocation = document.getElementById('geocoder');
+
+    // // Finally append that node to the new parent, recursively searching out and re-parenting nodes.
+    // function setParent(el, newParent) {
+    //     newParent.appendChild(el);
+    // }
+    // setParent(htmlObject, newControlLocation);
 
     // Add data layers to the map
     // addCounties(map);
@@ -242,9 +267,11 @@ function createPopupContent(properties, attribute){
 function addMarker(e){
     if (catLocation != null) {
         map.removeLayer(catLocation);
-        $('.removeCat').prop("disabled", false);
-        $('.assessCat').prop("disabled", false);
     }
+    $('.removeCat').prop("disabled", false);
+    $('.assessCat').prop("disabled", false);
+
+    console.log(e.latlng);
 
     catLocation = new L.marker(e.latlng, {icon: catIcon}).addTo(map);
 }
@@ -402,6 +429,7 @@ function createResultsTable(withinList, location) {
 //Create Map
 $(document).ready(createMap());
 
+
 // Click Events for Buttons
 $('.addCat').on('click', function(){
     $( ".results" ).remove();
@@ -427,6 +455,10 @@ $('.assessCat').on('click', function(){
 
     checkIntersection();
     reportAssessment();
+});
+
+$('div.sidebar').click(function(e){
+    e.stopPropagation();
 });
 
 // Map click
