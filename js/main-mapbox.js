@@ -10,11 +10,11 @@ var catAreaMaxPoly = null; // Polygon of max cat home range
 var catAreaAvg = null; // Visual Feature of avg cat home range
 var catAreaAvgPoly = null; // Polygon of avg cat home range
 var allowLoc = false;  // Allow cat location to be put on map, false allows clicking of wildlife areas
-var catIcon = L.icon({
-    iconUrl: 'img/cat.png',
-    iconSize:     [35, 40], // size of the icon
-    iconAnchor:   [20, 30], // point of the icon which will correspond to marker's location
-});
+// var catIcon = L.icon({
+//     iconUrl: 'img/cat.png',
+//     iconSize:     [35, 40], // size of the icon
+//     iconAnchor:   [20, 30], // point of the icon which will correspond to marker's location
+// });
 // Styles for Features
 var style = {
     'countyStyle' : {
@@ -43,7 +43,7 @@ var style = {
 
 //Declare API key and other options for OpenCageData geocoder
 var searchOptions = {
-    key: '536425ab5de04e479897f4577a628553',
+    key: 'c0a1ea5b826c49e0bdfb6831aa2c00b3',
     limit: 5, // number of results to be displayed
     position: 'topright',
     placeholder: 'Search', // the text in the empty search box
@@ -60,139 +60,113 @@ var searchOptions = {
 //Function to instantiate the Leaflet map
 function createMap(){
     //create the map
-    var southWest = L.latLng(41.5, -94);  
-    var northEast = L.latLng(45, -85);	
-    var bounds = L.latLngBounds(southWest, northEast);
-    map = L.map('map', {
-        center: [43.05,-89.4],
+    var southWest = [-94, 41.5];  
+    var northEast = [-85, 45];	
+    var bounds = [southWest, northEast];  
+    mapboxgl.accessToken = 'pk.eyJ1IjoianNlaWJlbDU1IiwiYSI6ImNrNmpxc3pzYTAwZXIzanZ4Nm5scHAzam0ifQ.5NLBHlevG0PL-E13Yax9NA';  
+    map = new mapboxgl.Map({
+      container: 'map',
+      style: 'mapbox://styles/jseibel55/ckjvkh5o70q9y1aukajmy8pwx', // stylesheet location
+      center: [-89.4, 43.05],
         zoom: 10,
         minZoom: 8,
         maxZoom: 18,
         maxBounds:bounds,
         zoomControl: false,
         tap:false,
-        doubleClickZoom:false,
-    })
-    
-    // Add zoom control (but in top right)
-    L.control.zoom({
-        position: 'topright'
-    }).addTo(map);
-    // Add Home button
-    L.easyButton('<img src="img/home.svg">', function(){
-        map.setView([43.05,-89.4], 10);
-    },'zoom to original extent',{ position: 'topright' }).addTo(map);
-    // Add scale bar
-    L.control.scale().addTo(map);
-
-    // Basemaps
-    var mapboxBasemap = L.tileLayer('https://api.mapbox.com/styles/v1/jseibel55/ckjvkh5o70q9y1aukajmy8pwx/tiles/256/{z}/{x}/{y}@2x?access_token={accessToken}', {
-        attribution: '<a href="https://www.mapbox.com/">Mapbox</a>',
-        accessToken: 'pk.eyJ1IjoianNlaWJlbDU1IiwiYSI6ImNrNmpxc3pzYTAwZXIzanZ4Nm5scHAzam0ifQ.5NLBHlevG0PL-E13Yax9NA'
-    }).addTo(map);
-    var openStreetsGrayBasemap = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-    });
-    var satelliteBasemap =  L.tileLayer('https://api.mapbox.com/styles/v1/jseibel55/ckl4a4rhl36yk17nqd4wgl8fk/tiles/256/{z}/{x}/{y}@2x?access_token={accessToken}', {
-        attribution: '<a href="https://www.mapbox.com/">Mapbox</a>',
-        accessToken: 'pk.eyJ1IjoianNlaWJlbDU1IiwiYSI6ImNrNmpxc3pzYTAwZXIzanZ4Nm5scHAzam0ifQ.5NLBHlevG0PL-E13Yax9NA'
     });
 
-    // //Create basemap group for control panel
-	var basemaps = {
-        'Streets Color': mapboxBasemap,
-        'Streets Gray': openStreetsGrayBasemap,
-        'Satellite': satelliteBasemap,
-    }
-    var overlays = {};
-    L.control.layers(basemaps, overlays, {position: 'bottomright'}).addTo(map);
-
-    // Add Sidebar to map
-    var sidebar = L.control({position: 'topleft'});
-	sidebar.onAdd = function (map) {
-		this._div = L.DomUtil.create('div', 'sidebar');
-        this._div.innerHTML = '<p id="instruction-title"><b>Assess potential risk to wildlife<br></p>';
-        this._div.innerHTML += '<p id="instuction">Click Add Cat to be begin. Then click on the map or search by address.</p>';
-        this._div.innerHTML += '<button type="button" class="btn btn-primary addCat">Add Cat</button>';
-        this._div.innerHTML += '<button type="button" class="btn btn-primary removeCat" disabled>Remove Cat</button><br>';
-        this._div.innerHTML += '<div id="geocoder" class="geocoder"></div>';
-        this._div.innerHTML += '<button type="button" class="btn btn-success assessCat" disabled>Assess Cat</button>';
-
-		return this._div;
-	};
-    sidebar.addTo(map);
-
-    mapboxgl.accessToken = 'pk.eyJ1IjoianNlaWJlbDU1IiwiYSI6ImNrNmpxc3pzYTAwZXIzanZ4Nm5scHAzam0ifQ.5NLBHlevG0PL-E13Yax9NA';
     var geocoder = new MapboxGeocoder({
         accessToken: mapboxgl.accessToken,
         mapboxgl: mapboxgl,
-    });
-    geocoder.addTo('#geocoder'); 
+        marker: {
+            color: 'orange'
+            },
+        })
+    map.addControl(
+        geocoder
+    );
     geocoder.on('result', function(ev) {
-        if (catLocation != null) {
-            map.removeLayer(catLocation);
-            map.removeLayer(catAreaMax);
-            map.removeLayer(catAreaAvg);
-        }
-        if (allowLoc == true) {
-            var center = [ev.result.center[1],ev.result.center[0]]
-
-            $('.removeCat').prop("disabled", false);
-            $('.assessCat').prop("disabled", false);
-            // var bounds = ev.result.bbox;
-            // console.log(bounds)
-            // var poly = L.polygon([
-            //     bounds[0].getSouthEast(),
-            //     bounds[1].getNorthEast(),
-            //     bounds[2].getNorthWest(),
-            //     bounds[3].getSouthWest()
-            // ]);//.addTo(map);
-            // map.fitBounds([[bounds[1], bounds[0]], [bounds[3], bounds[2]]]);
-
-            catLocation = new L.marker(center, {icon: catIcon}).addTo(map);
-            eventLngLat = [ev.result.center[0],ev.result.center[1]];
-            console.log(eventLngLat);
-
-            if (catAreaMax != null) {
-                map.removeLayer(catAreaMax);
-                map.removeLayer(catAreaAvg);
-            }
-
-            catAreaMaxPoly = makeRadius(eventLngLat, 1200);
-            catAreaMax = L.geoJson(catAreaMaxPoly, {
-                style: style.catAreaMaxStyle
-            }).addTo(map);
-            catAreaAvgPoly = makeRadius(eventLngLat, 400);
-            catAreaAvg = L.geoJson(catAreaAvgPoly, {
-                style: style.catAreaAvgStyle
-            }).addTo(map);
-        }
+        console.log(ev);
+        
     });
 
-    // Add place searchbar to map
+    // var geocoder = new MapboxGeocoder({
+    //     accessToken: mapboxgl.accessToken,
+    //     mapboxgl: mapboxgl,
+    // }); 
+    // document.getElementById('geocoder').appendChild(geocoder.onAdd(map));
+    
+    // // Add zoom control (but in top right)
+    // L.control.zoom({
+    //     position: 'topright'
+    // }).addTo(map);
+    // // Add Home button
+    // L.easyButton('<img src="img/home.svg">', function(){
+    //     map.setView([43.05,-89.4], 10);
+    // },'zoom to original extent',{ position: 'topright' }).addTo(map);
+    // // Add scale bar
+    // L.control.scale().addTo(map);
+
+    // // Basemaps
+    // var mapboxBasemap = L.tileLayer('https://api.mapbox.com/styles/v1/jseibel55/ckjvkh5o70q9y1aukajmy8pwx/tiles/256/{z}/{x}/{y}@2x?access_token={accessToken}', {
+    //     attribution: '<a href="https://www.mapbox.com/">Mapbox</a>',
+    //     accessToken: 'pk.eyJ1IjoianNlaWJlbDU1IiwiYSI6ImNrNmpxc3pzYTAwZXIzanZ4Nm5scHAzam0ifQ.5NLBHlevG0PL-E13Yax9NA'
+    // });
+    // var openStreetsGrayBasemap = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+    //     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+    // }).addTo(map);
+    // var satelliteBasemap =  L.tileLayer('https://api.mapbox.com/styles/v1/jseibel55/ckl4a4rhl36yk17nqd4wgl8fk/tiles/256/{z}/{x}/{y}@2x?access_token={accessToken}', {
+    //     attribution: '<a href="https://www.mapbox.com/">Mapbox</a>',
+    //     accessToken: 'pk.eyJ1IjoianNlaWJlbDU1IiwiYSI6ImNrNmpxc3pzYTAwZXIzanZ4Nm5scHAzam0ifQ.5NLBHlevG0PL-E13Yax9NA'
+    // });
+
+    // // //Create basemap group for control panel
+	// var basemaps = {
+    //     'Streets Color': mapboxBasemap,
+    //     'Streets Gray': openStreetsGrayBasemap,
+    //     'Satellite': satelliteBasemap,
+    // }
+    // var overlays = {};
+    // L.control.layers(basemaps, overlays, {position: 'bottomright'}).addTo(map);
+
+    // // Add Sidebar to map
+    // var sidebar = L.control({position: 'topleft'});
+	// sidebar.onAdd = function (map) {
+	// 	this._div = L.DomUtil.create('div', 'sidebar');
+    //     this._div.innerHTML = '<p id="instruction-title"><b>Assess potential risk to wildlife<br></p>';
+    //     // this._div.innerHTML += '<div id="geocoder" class="form-group has-search">\
+    //     //                             <span class="fa fa-search form-control-feedback"></span>\
+    //     //                             <input type="text" class="form-control" placeholder="Search">\
+    //     //                         </div>'
+    //     this._div.innerHTML += '<p id="instuction">Click Add Cat to be begin. Then click on the map or search by address.</p>';
+    //     this._div.innerHTML += '<button type="button" class="btn btn-primary addCat">Add Cat</button>';
+    //     this._div.innerHTML += '<button type="button" class="btn btn-primary removeCat" disabled>Remove Cat</button><br>';
+    //     this._div.innerHTML += '<div id="geocoder"></div><br>';
+    //     this._div.innerHTML += '<button type="button" class="btn btn-success assessCat" disabled>Assess Cat</button>';
+
+	// 	return this._div;
+	// };
+    // sidebar.addTo(map);
+
+    // // // Add place searchbar to map
     // var searchControl = L.Control.openCageSearch(searchOptions).addTo(map);
-    // searchControl.markGeocode = function(result) {
-    //     if (catLocation != null) {
-    //         map.removeLayer(catLocation);
-    //         map.removeLayer(catAreaMax);
-    //         map.removeLayer(catAreaAvg);
-    //     }
+    // searchControl.markGeocode = function(e) {
+    //     console.log(e);
     //     if (allowLoc == true) {
     //         $('.removeCat').prop("disabled", false);
     //         $('.assessCat').prop("disabled", false);
-    //         var center = result.center;
-    //         var bounds = result.bounds;
-    //         var poly = L.polygon([
-    //             bounds.getSouthEast(),
-    //             bounds.getNorthEast(),
-    //             bounds.getNorthWest(),
-    //             bounds.getSouthWest()
-    //         ]);//.addTo(map);
-    //         map.fitBounds(poly.getBounds());
+    //         var center = e.center;
+    //         var bbox = e.bbox;
+    //         // L.polygon([
+    //         //     bbox.getSouthEast(),
+    //         //     bbox.getNorthEast(),
+    //         //     bbox.getNorthWest(),
+    //         //     bbox.getSouthWest()
+    //         // ]).addTo(map);
 
     //         catLocation = new L.marker(center, {icon: catIcon}).addTo(map);
     //         eventLngLat = [center.lng, center.lat];
-    //         console.log(eventLngLat);
 
     //         if (catAreaMax != null) {
     //             map.removeLayer(catAreaMax);
@@ -221,11 +195,11 @@ function createMap(){
     // }
     // setParent(htmlObject, newControlLocation);
 
-    // Add data layers to the map
-    // addCounties(map);
-    addWildlifeAreas(map);
-    addIBA(map);
-    // addHistoricalCats(map);
+    // // Add data layers to the map
+    // // addCounties(map);
+    // addWildlifeAreas(map);
+    // addIBA(map);
+    // // addHistoricalCats(map);
 
 };
 
@@ -509,44 +483,44 @@ function createResultsTable(withinList, location) {
 $(document).ready(createMap());
 
 // Click Events for Buttons in sidebar
-$('.addCat').on('click', function(){
-    $( ".results" ).remove();
-    allowLoc = true;
-});
-$('.removeCat').on('click', function(){
-    allowLoc = false;
-    $('.removeCat').prop("disabled", true);
-    $('.assessCat').prop("disabled", true);
+// $('.addCat').on('click', function(){
+//     $( ".results" ).remove();
+//     allowLoc = true;
+// });
+// $('.removeCat').on('click', function(){
+//     allowLoc = false;
+//     $('.removeCat').prop("disabled", true);
+//     $('.assessCat').prop("disabled", true);
 
-    map.removeLayer(catLocation);
-    map.removeLayer(catAreaMax);
-    map.removeLayer(catAreaAvg);
-    catLocation = null;
+//     map.removeLayer(catLocation);
+//     map.removeLayer(catAreaMax);
+//     map.removeLayer(catAreaAvg);
+//     catLocation = null;
 
-    $( ".results" ).remove();
-});
-$('.assessCat').on('click', function(){
-    $( ".results" ).remove();
-    allowLoc = false;
-    $('.assessCat').prop("disabled", true);
-    $('.addCat').prop("disabled", false);
+//     $( ".results" ).remove();
+// });
+// $('.assessCat').on('click', function(){
+//     $( ".results" ).remove();
+//     allowLoc = false;
+//     $('.assessCat').prop("disabled", true);
+//     $('.addCat').prop("disabled", false);
 
-    checkIntersection();
-    reportAssessment();
-});
+//     checkIntersection();
+//     reportAssessment();
+// });
 
-// Prevent click through the sidebar
-$('div.sidebar').click(function(e){
-    e.stopPropagation();
-});
+// // Prevent click through the sidebar
+// $('div.sidebar').click(function(e){
+//     e.stopPropagation();
+// });
 
-// Map click
-map.on('click', function(e) {
-    if(allowLoc == true){
-        addMarker(e);
-        showBuffer(e);
-    }
-});
+// // Map click
+// map.on('click', function(e) {
+//     if(allowLoc == true){
+//         addMarker(e);
+//         showBuffer(e);
+//     }
+// });
 
 // Open About Modal when clicked
 $('#activate-about').on('click', function(e) {
