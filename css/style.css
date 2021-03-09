@@ -25,10 +25,14 @@ body{
 	top: calc(100% - 56px) + 5px;
   width: 20vw;
 }
-/* Styling within sidebar */
-#instruction {
+/** Styling within sidebar **/
+#instruction-title {
   margin: 5px 0 30px 0;
   font-size: 2.5vh;
+}
+#instruction {
+  margin: 5px 0 30px 0;
+  font-size: 2vh;
 }
 .addCat {
   margin: 10px 1px 0 1px;
@@ -53,6 +57,21 @@ body{
   text-align: center;
   pointer-events: none;
   color: #aaa;
+}
+.leaflet-container a {
+  width: 30vw;
+}
+/* Address Search */
+.leaflet-touch .leaflet-control-ocd-search {
+  box-shadow: none;
+  border: 2px solid rgba(0,0,0,.2);
+  background-clip: padding-box;
+  line-height: 30px;
+  left: -10px;
+}
+.leaflet-touch .leaflet-control-ocd-search-form input {
+  font-size: 20px;
+  width: 13vw;
 }
 
 /** Results **/

@@ -110,34 +110,105 @@ function createMap(){
     var sidebar = L.control({position: 'topleft'});
 	sidebar.onAdd = function (map) {
 		this._div = L.DomUtil.create('div', 'sidebar');
-        this._div.innerHTML = '<p id="instruction"><b>Add a cat to the map to assess risk to sensitive wildlife areas<br></p>';
-        this._div.innerHTML += '<div id="geocoder" class="form-group has-search">\
-                                    <span class="fa fa-search form-control-feedback"></span>\
-                                    <input type="text" class="form-control" placeholder="Search">\
-                                </div>'
+        this._div.innerHTML = '<p id="instruction-title"><b>Assess potential risk to wildlife<br></p>';
+        // this._div.innerHTML += '<div id="geocoder" class="form-group has-search">\
+        //                             <span class="fa fa-search form-control-feedback"></span>\
+        //                             <input type="text" class="form-control" placeholder="Search">\
+        //                         </div>'
+        this._div.innerHTML += '<p id="instuction">Click Add Cat to be begin. Then click on the map or search by address.</p>';
         this._div.innerHTML += '<button type="button" class="btn btn-primary addCat">Add Cat</button>';
         this._div.innerHTML += '<button type="button" class="btn btn-primary removeCat" disabled>Remove Cat</button><br>';
+        this._div.innerHTML += '<div id="geocoder"></div><br>';
         this._div.innerHTML += '<button type="button" class="btn btn-success assessCat" disabled>Assess Cat</button>';
 
 		return this._div;
 	};
     sidebar.addTo(map);
 
-    // Add place searchbar to map
-    // var searchControl = L.Control.openCageSearch(searchOptions);
-    // searchControl.addTo(map);
+    // // Add place searchbar to map
+    var searchControl = L.Control.openCageSearch(searchOptions).addTo(map);
+    searchControl.markGeocode = function(e) {
+        console.log(e);
+        if (allowLoc == true) {
+            $('.removeCat').prop("disabled", false);
+            $('.assessCat').prop("disabled", false);
+            var center = e.center;
+            var bbox = e.bbox;
+            // L.polygon([
+            //     bbox.getSouthEast(),
+            //     bbox.getNorthEast(),
+            //     bbox.getNorthWest(),
+            //     bbox.getSouthWest()
+            // ]).addTo(map);
+
+            catLocation = new L.marker(center, {icon: catIcon}).addTo(map);
+            eventLngLat = [center.lng, center.lat];
+
+            if (catAreaMax != null) {
+                map.removeLayer(catAreaMax);
+                map.removeLayer(catAreaAvg);
+            }
+
+            catAreaMaxPoly = makeRadius(eventLngLat, 1200);
+            catAreaMax = L.geoJson(catAreaMaxPoly, {
+                style: style.catAreaMaxStyle
+            }).addTo(map);
+            catAreaAvgPoly = makeRadius(eventLngLat, 400);
+            catAreaAvg = L.geoJson(catAreaAvgPoly, {
+                style: style.catAreaAvgStyle
+            }).addTo(map);
+        }
+    };
+
+    // var searchControl = L.Control.geocoder({
+    //     defaultMarkGeocode: false,
+    //     collapsed: false,
+    // })
+    //     .on('markgeocode', function(e) {
+    //         console.log(e);
+    //         allowLoc = true;
+    //         $('.removeCat').prop("disabled", false);
+    //         $('.assessCat').prop("disabled", false);
+    //         var center = e.geocode.center;
+    //         var bbox = e.geocode.bbox;
+    //         var poly = L.polygon([
+    //         bbox.getSouthEast(),
+    //         bbox.getNorthEast(),
+    //         bbox.getNorthWest(),
+    //         bbox.getSouthWest()
+    //         ]);
+    //         map.fitBounds(poly.getBounds());
+
+    //         catLocation = new L.marker(center, {icon: catIcon}).addTo(map);
+    //         eventLngLat = [center.lng, center.lat];
+
+    //         if (catAreaMax != null) {
+    //             map.removeLayer(catAreaMax);
+    //             map.removeLayer(catAreaAvg);
+    //         }
+
+    //         catAreaMaxPoly = makeRadius(eventLngLat, 1200);
+    //         catAreaMax = L.geoJson(catAreaMaxPoly, {
+    //             style: style.catAreaMaxStyle
+    //         }).addTo(map);
+    //         catAreaAvgPoly = makeRadius(eventLngLat, 400);
+    //         catAreaAvg = L.geoJson(catAreaAvgPoly, {
+    //             style: style.catAreaAvgStyle
+    //         }).addTo(map);
+
+    // }).addTo(map);
 
 
     // Call the getContainer routine.
-    // var htmlObject = searchControl.getContainer();
-    // // Get the desired parent node.
-    // var newControlLocation = document.getElementById('geocoder');
+    var htmlObject = searchControl.getContainer();
+    // Get the desired parent node.
+    var newControlLocation = document.getElementById('geocoder');
 
-    // // Finally append that node to the new parent, recursively searching out and re-parenting nodes.
-    // function setParent(el, newParent) {
-    //     newParent.appendChild(el);
-    // }
-    // setParent(htmlObject, newControlLocation);
+    // Finally append that node to the new parent, recursively searching out and re-parenting nodes.
+    function setParent(el, newParent) {
+        newParent.appendChild(el);
+    }
+    setParent(htmlObject, newControlLocation);
 
     // Add data layers to the map
     // addCounties(map);
@@ -183,7 +254,6 @@ function addHistoricalCats(map){
     // load GeoJSON file
     
 }
-
 
 //Set style for Wildlife Areas
 function wildlife_area_style(feature) {
@@ -270,8 +340,6 @@ function addMarker(e){
     }
     $('.removeCat').prop("disabled", false);
     $('.assessCat').prop("disabled", false);
-
-    console.log(e.latlng);
 
     catLocation = new L.marker(e.latlng, {icon: catIcon}).addTo(map);
 }
@@ -429,8 +497,7 @@ function createResultsTable(withinList, location) {
 //Create Map
 $(document).ready(createMap());
 
-
-// Click Events for Buttons
+// Click Events for Buttons in sidebar
 $('.addCat').on('click', function(){
     $( ".results" ).remove();
     allowLoc = true;
@@ -457,6 +524,7 @@ $('.assessCat').on('click', function(){
     reportAssessment();
 });
 
+// Prevent click through the sidebar
 $('div.sidebar').click(function(e){
     e.stopPropagation();
 });
@@ -469,10 +537,10 @@ map.on('click', function(e) {
     }
 });
 
+// Open About Modal when clicked
 $('#activate-about').on('click', function(e) {
     $('#about-screen').modal('show');
 });
-
 
 // Open popup warning to view on desktop if user opens in mobile
 // Otherwise Splash Screen when start
