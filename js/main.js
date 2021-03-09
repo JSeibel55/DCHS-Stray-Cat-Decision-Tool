@@ -43,7 +43,7 @@ var style = {
 
 //Declare API key and other options for OpenCageData geocoder
 var searchOptions = {
-    key: 'c0a1ea5b826c49e0bdfb6831aa2c00b3',
+    key: '536425ab5de04e479897f4577a628553',
     limit: 5, // number of results to be displayed
     position: 'topright',
     placeholder: 'Search', // the text in the empty search box
@@ -71,6 +71,7 @@ function createMap(){
         maxBounds:bounds,
         zoomControl: false,
         tap:false,
+        doubleClickZoom:false,
     })
     
     // Add zoom control (but in top right)
@@ -125,21 +126,26 @@ function createMap(){
 	};
     sidebar.addTo(map);
 
-    // // Add place searchbar to map
+    // Add place searchbar to map
     var searchControl = L.Control.openCageSearch(searchOptions).addTo(map);
-    searchControl.markGeocode = function(e) {
-        console.log(e);
+    searchControl.markGeocode = function(result) {
+        if (catLocation != null) {
+            map.removeLayer(catLocation);
+            map.removeLayer(catAreaMax);
+            map.removeLayer(catAreaAvg);
+        }
         if (allowLoc == true) {
             $('.removeCat').prop("disabled", false);
             $('.assessCat').prop("disabled", false);
-            var center = e.center;
-            var bbox = e.bbox;
-            // L.polygon([
-            //     bbox.getSouthEast(),
-            //     bbox.getNorthEast(),
-            //     bbox.getNorthWest(),
-            //     bbox.getSouthWest()
-            // ]).addTo(map);
+            var center = result.center;
+            var bounds = result.bounds;
+            var poly = L.polygon([
+                bounds.getSouthEast(),
+                bounds.getNorthEast(),
+                bounds.getNorthWest(),
+                bounds.getSouthWest()
+            ]);//.addTo(map);
+            map.fitBounds(poly.getBounds());
 
             catLocation = new L.marker(center, {icon: catIcon}).addTo(map);
             eventLngLat = [center.lng, center.lat];
@@ -160,43 +166,12 @@ function createMap(){
         }
     };
 
-    // var searchControl = L.Control.geocoder({
-    //     defaultMarkGeocode: false,
-    //     collapsed: false,
-    // })
-    //     .on('markgeocode', function(e) {
-    //         console.log(e);
-    //         allowLoc = true;
-    //         $('.removeCat').prop("disabled", false);
-    //         $('.assessCat').prop("disabled", false);
-    //         var center = e.geocode.center;
-    //         var bbox = e.geocode.bbox;
-    //         var poly = L.polygon([
-    //         bbox.getSouthEast(),
-    //         bbox.getNorthEast(),
-    //         bbox.getNorthWest(),
-    //         bbox.getSouthWest()
-    //         ]);
-    //         map.fitBounds(poly.getBounds());
-
-    //         catLocation = new L.marker(center, {icon: catIcon}).addTo(map);
-    //         eventLngLat = [center.lng, center.lat];
-
-    //         if (catAreaMax != null) {
-    //             map.removeLayer(catAreaMax);
-    //             map.removeLayer(catAreaAvg);
-    //         }
-
-    //         catAreaMaxPoly = makeRadius(eventLngLat, 1200);
-    //         catAreaMax = L.geoJson(catAreaMaxPoly, {
-    //             style: style.catAreaMaxStyle
-    //         }).addTo(map);
-    //         catAreaAvgPoly = makeRadius(eventLngLat, 400);
-    //         catAreaAvg = L.geoJson(catAreaAvgPoly, {
-    //             style: style.catAreaAvgStyle
-    //         }).addTo(map);
-
-    // }).addTo(map);
+    // mapboxgl.accessToken = 'pk.eyJ1IjoianNlaWJlbDU1IiwiYSI6ImNrNmpxc3pzYTAwZXIzanZ4Nm5scHAzam0ifQ.5NLBHlevG0PL-E13Yax9NA';
+    // var geocoder = new MapboxGeocoder({
+    //     accessToken: mapboxgl.accessToken,
+    //     mapboxgl: mapboxgl,
+    //     marker: false
+    // });
 
 
     // Call the getContainer routine.
