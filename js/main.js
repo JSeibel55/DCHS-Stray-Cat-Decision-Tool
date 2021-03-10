@@ -41,21 +41,6 @@ var style = {
     }
 }
 
-//Declare API key and other options for OpenCageData geocoder
-var searchOptions = {
-    key: '536425ab5de04e479897f4577a628553',
-    limit: 5, // number of results to be displayed
-    position: 'topright',
-    placeholder: 'Search', // the text in the empty search box
-    errorMessage: 'Nothing found.',
-    showResultIcons: true,
-    collapsed: false,
-    expand: 'click',
-    addResultToMap: false, // if a map marker should be added after the user clicks a result
-    onResultClick: undefined, // callback with result as first parameter
-};
-
-
 ///// Functions for Map /////
 //Function to instantiate the Leaflet map
 function createMap(){
@@ -89,10 +74,10 @@ function createMap(){
     var mapboxBasemap = L.tileLayer('https://api.mapbox.com/styles/v1/jseibel55/ckjvkh5o70q9y1aukajmy8pwx/tiles/256/{z}/{x}/{y}@2x?access_token={accessToken}', {
         attribution: '<a href="https://www.mapbox.com/">Mapbox</a>',
         accessToken: 'pk.eyJ1IjoianNlaWJlbDU1IiwiYSI6ImNrNmpxc3pzYTAwZXIzanZ4Nm5scHAzam0ifQ.5NLBHlevG0PL-E13Yax9NA'
-    }).addTo(map);
+    });
     var openStreetsGrayBasemap = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-    });
+    }).addTo(map);
     var satelliteBasemap =  L.tileLayer('https://api.mapbox.com/styles/v1/jseibel55/ckl4a4rhl36yk17nqd4wgl8fk/tiles/256/{z}/{x}/{y}@2x?access_token={accessToken}', {
         attribution: '<a href="https://www.mapbox.com/">Mapbox</a>',
         accessToken: 'pk.eyJ1IjoianNlaWJlbDU1IiwiYSI6ImNrNmpxc3pzYTAwZXIzanZ4Nm5scHAzam0ifQ.5NLBHlevG0PL-E13Yax9NA'
@@ -112,7 +97,7 @@ function createMap(){
 	sidebar.onAdd = function (map) {
 		this._div = L.DomUtil.create('div', 'sidebar');
         this._div.innerHTML = '<p id="instruction-title"><b>Assess potential risk to wildlife<br></p>';
-        this._div.innerHTML += '<p id="instuction">Click Add Cat to be begin. Then click on the map or search by address.</p>';
+        this._div.innerHTML += '<p id="instuction">Click "Add Cat" to be begin. Then click on the map or search by address to add a cat\'s location to the map.</p>';
         this._div.innerHTML += '<button type="button" class="btn btn-primary addCat">Add Cat</button>';
         this._div.innerHTML += '<button type="button" class="btn btn-primary removeCat" disabled>Remove Cat</button><br>';
         this._div.innerHTML += '<div id="geocoder" class="geocoder"></div>';
@@ -122,6 +107,7 @@ function createMap(){
 	};
     sidebar.addTo(map);
 
+    // Add Geocoder to the sidebar
     mapboxgl.accessToken = 'pk.eyJ1IjoianNlaWJlbDU1IiwiYSI6ImNrNmpxc3pzYTAwZXIzanZ4Nm5scHAzam0ifQ.5NLBHlevG0PL-E13Yax9NA';
     var geocoder = new MapboxGeocoder({
         accessToken: mapboxgl.accessToken,
@@ -129,97 +115,8 @@ function createMap(){
     });
     geocoder.addTo('#geocoder'); 
     geocoder.on('result', function(ev) {
-        if (catLocation != null) {
-            map.removeLayer(catLocation);
-            map.removeLayer(catAreaMax);
-            map.removeLayer(catAreaAvg);
-        }
-        if (allowLoc == true) {
-            var center = [ev.result.center[1],ev.result.center[0]]
-
-            $('.removeCat').prop("disabled", false);
-            $('.assessCat').prop("disabled", false);
-            // var bounds = ev.result.bbox;
-            // console.log(bounds)
-            // var poly = L.polygon([
-            //     bounds[0].getSouthEast(),
-            //     bounds[1].getNorthEast(),
-            //     bounds[2].getNorthWest(),
-            //     bounds[3].getSouthWest()
-            // ]);//.addTo(map);
-            // map.fitBounds([[bounds[1], bounds[0]], [bounds[3], bounds[2]]]);
-
-            catLocation = new L.marker(center, {icon: catIcon}).addTo(map);
-            eventLngLat = [ev.result.center[0],ev.result.center[1]];
-            console.log(eventLngLat);
-
-            if (catAreaMax != null) {
-                map.removeLayer(catAreaMax);
-                map.removeLayer(catAreaAvg);
-            }
-
-            catAreaMaxPoly = makeRadius(eventLngLat, 1200);
-            catAreaMax = L.geoJson(catAreaMaxPoly, {
-                style: style.catAreaMaxStyle
-            }).addTo(map);
-            catAreaAvgPoly = makeRadius(eventLngLat, 400);
-            catAreaAvg = L.geoJson(catAreaAvgPoly, {
-                style: style.catAreaAvgStyle
-            }).addTo(map);
-        }
+        geocode(ev);
     });
-
-    // Add place searchbar to map
-    // var searchControl = L.Control.openCageSearch(searchOptions).addTo(map);
-    // searchControl.markGeocode = function(result) {
-    //     if (catLocation != null) {
-    //         map.removeLayer(catLocation);
-    //         map.removeLayer(catAreaMax);
-    //         map.removeLayer(catAreaAvg);
-    //     }
-    //     if (allowLoc == true) {
-    //         $('.removeCat').prop("disabled", false);
-    //         $('.assessCat').prop("disabled", false);
-    //         var center = result.center;
-    //         var bounds = result.bounds;
-    //         var poly = L.polygon([
-    //             bounds.getSouthEast(),
-    //             bounds.getNorthEast(),
-    //             bounds.getNorthWest(),
-    //             bounds.getSouthWest()
-    //         ]);//.addTo(map);
-    //         map.fitBounds(poly.getBounds());
-
-    //         catLocation = new L.marker(center, {icon: catIcon}).addTo(map);
-    //         eventLngLat = [center.lng, center.lat];
-    //         console.log(eventLngLat);
-
-    //         if (catAreaMax != null) {
-    //             map.removeLayer(catAreaMax);
-    //             map.removeLayer(catAreaAvg);
-    //         }
-
-    //         catAreaMaxPoly = makeRadius(eventLngLat, 1200);
-    //         catAreaMax = L.geoJson(catAreaMaxPoly, {
-    //             style: style.catAreaMaxStyle
-    //         }).addTo(map);
-    //         catAreaAvgPoly = makeRadius(eventLngLat, 400);
-    //         catAreaAvg = L.geoJson(catAreaAvgPoly, {
-    //             style: style.catAreaAvgStyle
-    //         }).addTo(map);
-    //     }
-    // };
-
-    // // Call the getContainer routine.
-    // var htmlObject = searchControl.getContainer();
-    // // Get the desired parent node.
-    // var newControlLocation = document.getElementById('geocoder');
-
-    // // Finally append that node to the new parent, recursively searching out and re-parenting nodes.
-    // function setParent(el, newParent) {
-    //     newParent.appendChild(el);
-    // }
-    // setParent(htmlObject, newControlLocation);
 
     // Add data layers to the map
     // addCounties(map);
@@ -505,7 +402,64 @@ function createResultsTable(withinList, location) {
     $('.results-table').append('<br>');
 }
 
-//Create Map
+// Overrides the Mapbox Geocoder to add a cat icon, buffer, and zoom to location
+function geocode(ev) {
+    if (catLocation != null) {
+        map.removeLayer(catLocation);
+        map.removeLayer(catAreaMax);
+        map.removeLayer(catAreaAvg);
+    }
+    if (allowLoc == true) {
+        var center = [ev.result.center[1],ev.result.center[0]]
+
+        $('.removeCat').prop("disabled", false);
+        $('.assessCat').prop("disabled", false);
+
+        var overlayCenter = L.latLng(center);
+        var mapZoom = 14;
+        var pixWidth = 200;
+        var pixOffsetX = pixWidth / 2;
+        var pixOffsetY = pixOffsetX * 9 / 16;
+        var centerPoint = map.project(overlayCenter, mapZoom);
+        var latLng1 = map.unproject(L.point([centerPoint.x - pixOffsetX, centerPoint.y + pixOffsetY]), mapZoom);
+        var latLng2 = map.unproject(L.point([centerPoint.x + pixOffsetX, centerPoint.y - pixOffsetY]), mapZoom);
+        var bbox = L.latLngBounds(latLng1, latLng2);
+        map.fitBounds(bbox);
+
+        catLocation = new L.marker(center, {icon: catIcon}).addTo(map);
+        eventLngLat = [ev.result.center[0],ev.result.center[1]];
+
+        if (catAreaMax != null) {
+            map.removeLayer(catAreaMax);
+            map.removeLayer(catAreaAvg);
+        }
+
+        catAreaMaxPoly = makeRadius(eventLngLat, 1200);
+        catAreaMax = L.geoJson(catAreaMaxPoly, {
+            style: style.catAreaMaxStyle
+        }).addTo(map);
+        catAreaAvgPoly = makeRadius(eventLngLat, 400);
+        catAreaAvg = L.geoJson(catAreaAvgPoly, {
+            style: style.catAreaAvgStyle
+        }).addTo(map);
+    } else {
+        var center = [ev.result.center[1],ev.result.center[0]]
+
+        var overlayCenter = L.latLng(center);
+        var mapZoom = 15;
+        var pixWidth = 200;
+        var pixOffsetX = pixWidth / 2;
+        var pixOffsetY = pixOffsetX * 9 / 16;
+        var centerPoint = map.project(overlayCenter, mapZoom);
+        var latLng1 = map.unproject(L.point([centerPoint.x - pixOffsetX, centerPoint.y + pixOffsetY]), mapZoom);
+        var latLng2 = map.unproject(L.point([centerPoint.x + pixOffsetX, centerPoint.y - pixOffsetY]), mapZoom);
+        var bbox = L.latLngBounds(latLng1, latLng2);
+        map.fitBounds(bbox);
+    }
+}
+
+
+/// Create Map
 $(document).ready(createMap());
 
 // Click Events for Buttons in sidebar

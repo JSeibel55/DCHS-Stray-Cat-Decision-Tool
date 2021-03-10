@@ -35,13 +35,13 @@ body{
   font-size: 2vh;
 }
 .addCat {
-  margin: 10px 1px 0 1px;
+  margin: 10px 1px 0 -5px;
 }
 .removeCat {
-  margin: 10px 1px 0 1px;
+  margin: 10px 1px 0 10px;
 }
 .assessCat {
-  margin: 20px 1px 10px 1px;
+  margin: 20px 1px 10px -5px;
 }
 
 .has-search .form-control {
@@ -61,26 +61,11 @@ body{
 .leaflet-container a {
   width: 30vw;
 }
-/* Address Search */
-/* .leaflet-touch .leaflet-control-ocd-search {
-  box-shadow: none;
-  border: 2px solid rgba(0,0,0,.2);
-  background-clip: padding-box;
-  line-height: 30px;
-  left: -10px;
-}
-.leaflet-touch .leaflet-control-ocd-search-form input {
-  font-size: 20px;
-  width: 13vw;
-} */
 
 /* Geolocator */
 .geocoder {
-    /* position: absolute; */
-    /* z-index: 1; */
-    width: 50%;
-    /* left: 50%; */
-    margin: 15px 0 0 -10px;
+    width: 100%;
+    margin: 15px 0 0 -5px;
   }
   .mapboxgl-ctrl-geocoder {
     min-width: 100%;
