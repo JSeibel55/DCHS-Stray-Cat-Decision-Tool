@@ -13,8 +13,8 @@ body{
 }
 
 /** Sidebar **/
-.sidebar.leaflet-control {
-	position: fixed;
+.sidebar {
+	/* position: fixed; */
 	padding: 5px 20px 5px 20px;
 	font: 20px/22px Arial, Helvetica, sans-serif;
 	background: rgba(255,255,255, 1);
@@ -44,20 +44,6 @@ body{
   margin: 20px 1px 10px -5px;
 }
 
-.has-search .form-control {
-  padding-left: 2.375rem;
-}
-.has-search .form-control-feedback {
-  position: absolute;
-  z-index: 2;
-  display: block;
-  width: 2.375rem;
-  height: 2.375rem;
-  line-height: 2.375rem;
-  text-align: center;
-  pointer-events: none;
-  color: #aaa;
-}
 .leaflet-container a {
   width: 30vw;
 }
@@ -66,10 +52,76 @@ body{
 .geocoder {
     width: 100%;
     margin: 15px 0 0 -5px;
-  }
-  .mapboxgl-ctrl-geocoder {
+}
+.mapboxgl-ctrl-geocoder {
     min-width: 100%;
-  }
+}
+
+/** Data Sidebar **/
+.dataSidebar {
+	/* position: fixed; */
+	padding: 5px 5px 1px 10px;
+	font: 20px/22px Arial, Helvetica, sans-serif;
+	background: rgba(255,255,255, 1);
+	box-shadow: 0 0 15px rgba(0,0,0,0.2);
+	border-radius: 5px;
+	text-align:left;
+	left:0px;
+  width:15vw;
+  margin-top: 10px;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 24px;
+}
+.switch input { 
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+input:checked + .slider {
+  background-color: #2196F3;
+}
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+input:checked + .slider:before {
+  -webkit-transform: translateX(16px);
+  -ms-transform: translateX(16px);
+  transform: translateX(16px);
+}
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+.slider.round:before {
+  border-radius: 50%;
+}
 
 /** Results **/
 .results {

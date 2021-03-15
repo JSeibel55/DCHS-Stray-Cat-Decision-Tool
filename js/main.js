@@ -1,6 +1,6 @@
 //Global Variables
 var map;
-var wildlifeAreaFeatures;
+// var wildlifeAreaFeatures;
 var riskValue = null; // Highest level assessed for the location
 var areasWithin1200 = []; // List of wildlife areas within 1200 m at risk due to cats location
 var areasWithin400 = []; // List of wildlife areas within 400 m at risk due to cats location
@@ -23,6 +23,13 @@ var style = {
         opacity: 1,
         color: 'black',
         fillOpacity: 0.7
+    },
+    'ibaStyle' : {
+        fillColor: "blue",
+        weight: 2,
+        opacity: 1,
+        color: 'blue',
+        fillOpacity: 0.1
     },
     'catAreaMaxStyle' : {
         fillColor: 'gray',
@@ -95,13 +102,24 @@ function createMap(){
     // Add Sidebar to map
     var sidebar = L.control({position: 'topleft'});
 	sidebar.onAdd = function (map) {
-		this._div = L.DomUtil.create('div', 'sidebar');
-        this._div.innerHTML = '<p id="instruction-title"><b>Assess potential risk to wildlife<br></p>';
-        this._div.innerHTML += '<p id="instuction">Click "Add Cat" to be begin. Then click on the map or search by address to add a cat\'s location to the map.</p>';
-        this._div.innerHTML += '<button type="button" class="btn btn-primary addCat">Add Cat</button>';
-        this._div.innerHTML += '<button type="button" class="btn btn-primary removeCat" disabled>Remove Cat</button><br>';
-        this._div.innerHTML += '<div id="geocoder" class="geocoder"></div>';
-        this._div.innerHTML += '<button type="button" class="btn btn-success assessCat" disabled>Assess Cat</button>';
+		this._div = L.DomUtil.create('div', 'main-sidebar');
+        this._div.innerHTML = '<div class="sidebar"> <p id="instruction-title"><b>Assess potential risk to wildlife<br></p> \
+            <p id="instuction">Click "Add Cat" to be begin. Then click on the map or search by address to add a cat\'s location to the map.</p> \
+            <button type="button" class="btn btn-primary addCat">Add Cat</button> \
+            <button type="button" class="btn btn-primary removeCat" disabled>Remove Cat</button><br> \
+            <div id="geocoder" class="geocoder"></div> \
+            <button type="button" class="btn btn-success assessCat" disabled>Assess Cat</button> </div>';
+        // this._div.innerHTML += '<p id="instuction">Click "Add Cat" to be begin. Then click on the map or search by address to add a cat\'s location to the map.</p>';
+        // this._div.innerHTML += '<button type="button" class="btn btn-primary addCat">Add Cat</button>';
+        // this._div.innerHTML += '<button type="button" class="btn btn-primary removeCat" disabled>Remove Cat</button><br>';
+        // this._div.innerHTML += '<div id="geocoder" class="geocoder"></div>';
+        // this._div.innerHTML += '<button type="button" class="btn btn-success assessCat" disabled>Assess Cat</button> </div>';
+        this._div.innerHTML += '<div class="dataSidebar"><p id="instruction-title"><b>Add Data Layers<br></p> \
+            <p id=""> \
+            <label class="switch">\
+                <input type="checkbox" id="IBA">\
+                <span class="slider round"></span>\
+            </label> Important Bird Areas</p></div>';
 
 		return this._div;
 	};
@@ -121,7 +139,7 @@ function createMap(){
     // Add data layers to the map
     // addCounties(map);
     addWildlifeAreas(map);
-    addIBA(map);
+    // addIBA(map);
     // addHistoricalCats(map);
 
 };
@@ -151,9 +169,10 @@ function addWildlifeAreas(map){
 // Add important bird areas
 function addIBA(map){
     // load GeoJSON file
-    $.getJSON("data/Important_Bird_Areas.json",function(data){
-        // add GeoJSON layer to the map once the file is loaded
-        L.geoJson(data);
+    $.getJSON("data/Important_Bird_Areas.json", function(response){
+        IBALayer = L.geoJson(response, {
+            style: style.ibaStyle,
+        }).addTo(map);
     });
 }
 
@@ -487,6 +506,19 @@ $('.assessCat').on('click', function(){
 
     checkIntersection();
     reportAssessment();
+});
+
+// Detect data toggle active
+$('#IBA').is(":checked", function(){
+    addIBA(map);
+});
+$('input[type="checkbox"]').click(function(){
+    if($(this).is(":checked")){
+        addIBA(map);
+    }
+    else if($(this).is(":not(:checked)")){
+        map.removeLayer(IBALayer)
+    }
 });
 
 // Prevent click through the sidebar
