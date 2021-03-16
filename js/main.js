@@ -10,6 +10,7 @@ var catAreaMaxPoly = null; // Polygon of max cat home range
 var catAreaAvg = null; // Visual Feature of avg cat home range
 var catAreaAvgPoly = null; // Polygon of avg cat home range
 var allowLoc = false;  // Allow cat location to be put on map, false allows clicking of wildlife areas
+var resultsVisible = false; // If the results tab is visible on the screen
 var catIcon = L.icon({
     iconUrl: 'img/cat.png',
     iconSize:     [35, 40], // size of the icon
@@ -391,17 +392,37 @@ function checkIntersection() {
 function reportAssessment() {
     if (riskValue == 3) {
         $('body').append('<div class="results"> \
-            <div><p id="results-title"><b>This location is a <span style="color:#800026">HIGH RISK</span> to wildlife</b></p><div> \
-            <div class="results-table"></div></div>');
+            <div id="wrapper-top"> \
+                <div><p id="results-title"><b>This location is a <span style="color:#800026">HIGH RISK</span> to wildlife</b></p></div> \
+                <div class="closebtn" onclick="toggleResults()">&times;</div> \
+            </div> \
+            <div id="wrapper-bottom"> \
+                <div class="results-table"></div> \
+            </div> \
+        </div>');
     } else if (riskValue == 2) {
         $('body').append('<div class="results"> \
-            <div><p id="results-title"><b>This location is a <span style="color:#FD8D3C">MEDIUM RISK</span> to wildlife</b></p><div> \
-            <div class="results-table"></div></div>');
+            <div id="wrapper-top"> \
+                <div><p id="results-title"><b>This location is a <span style="color:#FD8D3C">MEDIUM RISK</span> to wildlife</b></p></div> \
+                <div class="closebtn" onclick="toggleResults()">&times;</div> \
+            </div> \
+            <div id="wrapper-bottom"> \
+                <div class="results-table"></div> \
+            </div> \
+        </div>');
     } else {
         $('body').append('<div class="results"> \
-            <div><p id="results-title"><b>This location is a <span style="color:#FFEDA0">LOW RISK</span> to wildlife</b></p><div> \
-            <div class="results-table"></div></div>');
+            <div id="wrapper-top"> \
+                <div><p id="results-title"><b>This location is a <span style="color:#FFEDA0">LOW RISK</span> to wildlife</b></p></div> \
+                <div class="closebtn" onclick="toggleResults()">&times;</div> \
+            </div> \
+            <div id="wrapper-bottom"> \
+                <div class="results-table"></div> \
+            </div> \
+        </div>');
     }
+
+    $('body').append('<div class="results-collapsed" onclick="toggleResults()">Show Assessment</div>')
     
     if (areasWithin400.length > 0) {
         $('.results-table').append('<span style="text-decoration: underline">Areas within 400 meters (~0.25 miles):</span><br>');
@@ -506,6 +527,18 @@ function geocode(ev) {
     }
 }
 
+// Toggle hide/display the Results window
+function toggleResults() {
+    if (resultsVisible == true) {
+        $('.results').hide();
+        resultsVisible = false;
+    }
+    else if (resultsVisible == false) {
+        $('.results').show();
+        resultsVisible = true;
+    }
+}
+
 
 /// Create Map
 $(document).ready(createMap());
@@ -514,6 +547,8 @@ $(document).ready(createMap());
 $('.addCat').on('click', function(){
     $("#addCat").toggleClass('btn-primary btn-secondary');
     $( ".results" ).remove();
+    $( ".results-collapsed" ).remove();
+    resultsVisible = false;
     allowLoc = true;
 });
 $('.removeCat').on('click', function(){
@@ -528,21 +563,22 @@ $('.removeCat').on('click', function(){
     catLocation = null;
 
     $( ".results" ).remove();
+    $( ".results-collapsed" ).remove();
 });
 $('.assessCat').on('click', function(){
     $( ".results" ).remove();
+    $( ".results-collapsed" ).remove();
     allowLoc = false;
     $('.assessCat').prop("disabled", true);
     $('.addCat').prop("disabled", false);
 
     checkIntersection();
     reportAssessment();
+    resultsVisible = true;
 });
 
 // Detect data toggle active
-$('#IBA').is(":checked", function(){
-    addIBA(map);
-});
+
 $('input[type="checkbox"]').click(function(){
     if($(this).is(":checked")){
         addIBA(map);
