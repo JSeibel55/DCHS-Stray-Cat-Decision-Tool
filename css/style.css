@@ -163,7 +163,11 @@ th {
 }
 
 /* Popup Info */
-.popup-feature-name {
+.popup-iba-feature-name {
+  font-size: 18px;
+  line-height: 20px;
+}
+.popup-wildlife-feature-name {
     font-size: 22px;
     line-height: 20px;
 }

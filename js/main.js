@@ -105,8 +105,8 @@ function createMap(){
 		this._div = L.DomUtil.create('div', 'main-sidebar');
         this._div.innerHTML = '<div class="sidebar"> <p id="instruction-title"><b>Assess potential risk to wildlife<br></p> \
             <p id="instuction">Click "Add Cat" to be begin. Then click on the map or search by address to add a cat\'s location to the map.</p> \
-            <button type="button" class="btn btn-primary addCat">Add Cat</button> \
-            <button type="button" class="btn btn-primary removeCat" disabled>Remove Cat</button><br> \
+            <button type="button" id="addCat" class="btn btn-secondary addCat">Add Cat</button> \
+            <button type="button" class="btn btn-secondary removeCat" disabled>Remove Cat</button><br> \
             <div id="geocoder" class="geocoder"></div> \
             <button type="button" class="btn btn-success assessCat" disabled>Assess Cat</button> </div>';
         // this._div.innerHTML += '<p id="instuction">Click "Add Cat" to be begin. Then click on the map or search by address to add a cat\'s location to the map.</p>';
@@ -129,6 +129,8 @@ function createMap(){
     mapboxgl.accessToken = 'pk.eyJ1IjoianNlaWJlbDU1IiwiYSI6ImNrNmpxc3pzYTAwZXIzanZ4Nm5scHAzam0ifQ.5NLBHlevG0PL-E13Yax9NA';
     var geocoder = new MapboxGeocoder({
         accessToken: mapboxgl.accessToken,
+        countries: 'us',
+        bbox: [-94, 41.5, -85, 45],
         mapboxgl: mapboxgl,
     });
     geocoder.addTo('#geocoder'); 
@@ -139,7 +141,6 @@ function createMap(){
     // Add data layers to the map
     // addCounties(map);
     addWildlifeAreas(map);
-    // addIBA(map);
     // addHistoricalCats(map);
 
 };
@@ -161,7 +162,7 @@ function addWildlifeAreas(map){
         wildlifeData = response;
         wildlifeAreaFeatures = L.geoJson(response, {
             style: wildlife_area_style,
-            onEachFeature: onEachFeature
+            onEachFeature: onEachWildlifeFeature
         }).addTo(map);
     });
 }
@@ -172,6 +173,7 @@ function addIBA(map){
     $.getJSON("data/Important_Bird_Areas.json", function(response){
         IBALayer = L.geoJson(response, {
             style: style.ibaStyle,
+            onEachFeature: onEachIBAFeature
         }).addTo(map);
     });
 }
@@ -199,12 +201,12 @@ function getRiskColor(lvl) {
                       '#FFEDA0' ;
 }
 
-//Event listeners for highlighing the polygon features
-function onEachFeature(feature, layer) {
+//Event listeners for highlighing the wildlife area polygon features
+function onEachWildlifeFeature(feature, layer) {
     layer.on({
         mouseover: highlightFeature,
         mouseout: resetHighlight,
-        click: polyPopup
+        click: wildlifePolyPopup
     });
 }
 //Highlight polygon feature
@@ -228,13 +230,13 @@ function highlightFeature(e) {
 function resetHighlight(e) {
     wildlifeAreaFeatures.resetStyle(e.target);
 }
-// Creates and activates a popup for the polygon feature
-function polyPopup(e) {
+// Creates and activates a popup for the wildlife area polygon feature
+function wildlifePolyPopup(e) {
     if (allowLoc == false) {
         var poly = e.target.feature;
 
         //Create the popup content for the combined dataset layer
-        var popupContent = createPopupContent(poly.properties);
+        var popupContent = createwildlifePopupContent(poly.properties);
 
         //bind the popup to the polygon
         e.target.bindPopup(popupContent, {
@@ -242,10 +244,10 @@ function polyPopup(e) {
         }).openPopup();
     }
 }
-// Creates text for the popups in the prop symbols
-function createPopupContent(properties, attribute){
+// Creates text for the popups in the wildlife area prop symbols
+function createwildlifePopupContent(properties){
     //add name to popup content string
-    var popupContent = "<p class='popup-feature-name'><b>" + properties.NAME + "</b></p>";
+    var popupContent = "<p class='popup-wildlife-feature-name'><b>" + properties.NAME + "</b></p>";
 
     //add formatted attribute to panel content string
     popupContent += "<p class='popup-detail'>Owner: <b><span id=''>" + properties.OWNER + "</span></b></p>";
@@ -255,7 +257,34 @@ function createPopupContent(properties, attribute){
     if (properties.WEBSITE.length > 0) {
         popupContent += "<p class='popup-detail'>More Info: <b><a href="+ properties.WEBSITE +" target='_blank'> Website </a></b></p>";
     }
-    
+
+    return popupContent;
+}
+
+//Event listeners for highlighing the IBA polygon features
+function onEachIBAFeature(feature, layer) {
+    layer.on({
+        click: IBApolyPopup
+    });
+}
+// Creates and activates a popup for the IBA feature
+function IBApolyPopup(e) {
+    if (allowLoc == false) {
+        var poly = e.target.feature;
+
+        //Create the popup content for the combined dataset layer
+        var popupContent = createIBAPopupContent(poly.properties);
+
+        //bind the popup to the polygon
+        e.target.bindPopup(popupContent, {
+            offset: new L.Point(0,0)
+        }).openPopup();
+    }
+}
+// Creates text for the IBA popups in the prop symbols
+function createIBAPopupContent(properties){
+    //add name to popup content string
+    var popupContent = "<p class='popup-iba-feature-name'><b>" + properties.IBA_NAME + "</b></p>";
 
     return popupContent;
 }
@@ -483,13 +512,15 @@ $(document).ready(createMap());
 
 // Click Events for Buttons in sidebar
 $('.addCat').on('click', function(){
+    $("#addCat").toggleClass('btn-primary btn-secondary');
     $( ".results" ).remove();
     allowLoc = true;
 });
 $('.removeCat').on('click', function(){
-    allowLoc = false;
+    $("#addCat").toggleClass('btn-secondary btn-primary');
     $('.removeCat').prop("disabled", true);
     $('.assessCat').prop("disabled", true);
+    allowLoc = false;
 
     map.removeLayer(catLocation);
     map.removeLayer(catAreaMax);
