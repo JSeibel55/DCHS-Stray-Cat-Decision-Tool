@@ -87,24 +87,27 @@ function createMap(){
     L.control.scale().addTo(map);
 
     // Basemaps
-    var mapboxBasemap = L.tileLayer('https://api.mapbox.com/styles/v1/jseibel55/ckjvkh5o70q9y1aukajmy8pwx/tiles/256/{z}/{x}/{y}@2x?access_token={accessToken}', {
+    var mapboxColor = L.tileLayer('https://api.mapbox.com/styles/v1/jseibel55/ckjvkh5o70q9y1aukajmy8pwx/tiles/256/{z}/{x}/{y}@2x?access_token={accessToken}', {
         attribution: '<a href="https://www.mapbox.com/">Mapbox</a>',
         accessToken: 'pk.eyJ1IjoianNlaWJlbDU1IiwiYSI6ImNrNmpxc3pzYTAwZXIzanZ4Nm5scHAzam0ifQ.5NLBHlevG0PL-E13Yax9NA'
     });
-    var openStreetsGrayBasemap = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { //'https://api.mapbox.com/styles/v1/jseibel55/ckmp4sj560qfq17o1bbt4sglv/tiles/256/{z}/{x}/{y}@2x?access_token={accessToken}', {  //https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+    var openStreetsGrayBasemap = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-        // attribution: '<a href="https://www.mapbox.com/">Mapbox</a>',
-        // accessToken: 'pk.eyJ1IjoianNlaWJlbDU1IiwiYSI6ImNrNmpxc3pzYTAwZXIzanZ4Nm5scHAzam0ifQ.5NLBHlevG0PL-E13Yax9NA'
     }).addTo(map);
-    var satelliteBasemap =  L.tileLayer('https://api.mapbox.com/styles/v1/jseibel55/ckl4a4rhl36yk17nqd4wgl8fk/tiles/256/{z}/{x}/{y}@2x?access_token={accessToken}', {
+    // var mapboxGray = L.tileLayer('https://api.mapbox.com/styles/v1/jseibel55/ckmp4sj560qfq17o1bbt4sglv/tiles/256/{z}/{x}/{y}@2x?access_token={accessToken}', {
+    //     attribution: '<a href="https://www.mapbox.com/">Mapbox</a>',
+    //     accessToken: 'pk.eyJ1IjoianNlaWJlbDU1IiwiYSI6ImNrNmpxc3pzYTAwZXIzanZ4Nm5scHAzam0ifQ.5NLBHlevG0PL-E13Yax9NA'
+    // }).addTo(map);
+    var satelliteBasemap =  L.tileLayer('https://api.mapbox.com/styles/v1/jseibel55/ckmqrltte1dsx17p96o9gwkgs/tiles/256/{z}/{x}/{y}@2x?access_token={accessToken}', {
         attribution: '<a href="https://www.mapbox.com/">Mapbox</a>',
         accessToken: 'pk.eyJ1IjoianNlaWJlbDU1IiwiYSI6ImNrNmpxc3pzYTAwZXIzanZ4Nm5scHAzam0ifQ.5NLBHlevG0PL-E13Yax9NA'
     });
 
     // //Create basemap group for control panel
 	var basemaps = {
-        'Streets Color': mapboxBasemap,
+        'Streets Color': mapboxColor,
         'Streets Gray': openStreetsGrayBasemap,
+        // 'Streets Gray': mapboxGray,
         'Satellite': satelliteBasemap,
     }
     var overlays = {};
