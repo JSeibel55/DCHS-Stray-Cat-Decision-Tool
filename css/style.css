@@ -16,7 +16,7 @@ body{
 .sidebar {
 	/* position: fixed; */
 	padding: 5px 20px 5px 20px;
-	font: 20px/22px Arial, Helvetica, sans-serif;
+	font: 20px/22px 'Open Sans', arial, sans-serif;
 	background: rgba(255,255,255, 1);
 	box-shadow: 0 0 15px rgba(0,0,0,0.2);
 	border-radius: 5px;
@@ -27,21 +27,21 @@ body{
 }
 /** Styling within sidebar **/
 #instruction-title {
-  margin: 5px 0 30px 0;
+  margin: 5px 0 20px 0;
   font-size: 2.5vh;
 }
 #instruction {
-  margin: 5px 0 30px 0;
+  margin: 0 0 0 0;
   font-size: 2vh;
 }
 .addCat {
-  margin: 10px 1px 0 -5px;
+  margin: 0 1px 0 -5px;
 }
 .removeCat {
-  margin: 10px 1px 0 10px;
+  margin: 0 1px 0 10px;
 }
 .assessCat {
-  margin: 20px 1px 10px -5px;
+  margin: 0 1px 10px -5px;
 }
 
 .leaflet-container a {
@@ -51,7 +51,7 @@ body{
 /* Geolocator */
 .geocoder {
     width: 100%;
-    margin: 15px 0 0 -5px;
+    margin: 15px 0 10px -5px;
 }
 .mapboxgl-ctrl-geocoder {
     min-width: 100%;
@@ -61,7 +61,7 @@ body{
 .dataSidebar {
 	/* position: fixed; */
 	padding: 5px 5px 1px 10px;
-	font: 20px/22px Arial, Helvetica, sans-serif;
+	font: 20px/22px 'Open Sans', arial, sans-serif;
 	background: rgba(255,255,255, 1);
 	box-shadow: 0 0 15px rgba(0,0,0,0.2);
 	border-radius: 5px;
@@ -123,12 +123,61 @@ input:checked + .slider:before {
   border-radius: 50%;
 }
 
+/** Legend **/
+#legend{
+  position: relative;
+  border: 2px solid #ccc;
+  background-color: white;
+  border-radius: 5px;
+  z-index: 1;
+  width: 35px;
+  height: 35px;
+  padding: 5px;
+  color: #000000;
+  z-index: 999;
+  font-family: 'Open Sans', arial, sans-serif;
+  font-size: 16px;
+}
+#legend-collapse{
+  position: relative;
+  width: 200px;
+  border: 2px solid #ccc;
+  border-radius: 5px;
+  z-index: 1;
+  overflow: hidden;
+  z-index: 999;
+}
+#card{
+  background-color: white;
+  padding: 0.5rem;
+}
+#pic{
+  float: left;
+  margin-right: 10px;
+  margin-bottom: 5px;
+  filter: drop-shadow(2px 2px 2px #222);
+}
+#info{
+  display: inline-block;
+  align-items: center;
+  line-height: 1em
+}
+#info span{
+  font-family: 'Open Sans', arial, sans-serif;
+  font-size: 1.5em;
+}
+#legend-title b {
+  font-family: 'Open Sans', arial, sans-serif;
+  font-size: 1.5em;
+  line-height: 1em;
+}
+
 /** Results **/
 .results {
   z-index: 3;
 	position: absolute;
 	/* padding: 10px 40px 5px 40px; */
-	font: 18px/20px Arial, Helvetica, sans-serif;
+	font: 18px/20px 'Open Sans', arial, sans-serif;
 	background: rgba(255,255,255, 1);
 	box-shadow: 0 0 15px rgba(0,0,0,0.2);
 	border-radius: 4px;
@@ -140,7 +189,7 @@ input:checked + .slider:before {
 .results-collapsed {
   z-index: 2;
 	position: absolute;
-	font: 18px Arial, Helvetica, sans-serif;
+	font: 18px 'Open Sans', arial, sans-serif;
 	background: rgba(255,255,255, 1);
 	box-shadow: 0 0 15px rgba(0,0,0,0.2);
 	border-radius: 5px;

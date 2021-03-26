@@ -25,6 +25,14 @@ var style = {
         color: 'black',
         fillOpacity: 0.7
     },
+    'catLocStyle' : {
+        radius: 5,
+        fillColor: "green",
+        color: "#000",
+        weight: 1,
+        opacity: 1,
+        fillOpacity: 0.8
+    },
     'ibaStyle' : {
         fillColor: "blue",
         weight: 2,
@@ -83,8 +91,10 @@ function createMap(){
         attribution: '<a href="https://www.mapbox.com/">Mapbox</a>',
         accessToken: 'pk.eyJ1IjoianNlaWJlbDU1IiwiYSI6ImNrNmpxc3pzYTAwZXIzanZ4Nm5scHAzam0ifQ.5NLBHlevG0PL-E13Yax9NA'
     });
-    var openStreetsGrayBasemap = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+    var openStreetsGrayBasemap = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { //'https://api.mapbox.com/styles/v1/jseibel55/ckmp4sj560qfq17o1bbt4sglv/tiles/256/{z}/{x}/{y}@2x?access_token={accessToken}', {  //https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        // attribution: '<a href="https://www.mapbox.com/">Mapbox</a>',
+        // accessToken: 'pk.eyJ1IjoianNlaWJlbDU1IiwiYSI6ImNrNmpxc3pzYTAwZXIzanZ4Nm5scHAzam0ifQ.5NLBHlevG0PL-E13Yax9NA'
     }).addTo(map);
     var satelliteBasemap =  L.tileLayer('https://api.mapbox.com/styles/v1/jseibel55/ckl4a4rhl36yk17nqd4wgl8fk/tiles/256/{z}/{x}/{y}@2x?access_token={accessToken}', {
         attribution: '<a href="https://www.mapbox.com/">Mapbox</a>',
@@ -109,22 +119,48 @@ function createMap(){
             <button type="button" id="addCat" class="btn btn-secondary addCat">Add Cat</button> \
             <button type="button" class="btn btn-secondary removeCat" disabled>Remove Cat</button><br> \
             <div id="geocoder" class="geocoder"></div> \
+            <p id="instuction">Once a cat\'s location is on the map, click "Assess Cat" to bring up a wildlife risk assessment at the location.</p> \
             <button type="button" class="btn btn-success assessCat" disabled>Assess Cat</button> </div>';
-        // this._div.innerHTML += '<p id="instuction">Click "Add Cat" to be begin. Then click on the map or search by address to add a cat\'s location to the map.</p>';
-        // this._div.innerHTML += '<button type="button" class="btn btn-primary addCat">Add Cat</button>';
-        // this._div.innerHTML += '<button type="button" class="btn btn-primary removeCat" disabled>Remove Cat</button><br>';
-        // this._div.innerHTML += '<div id="geocoder" class="geocoder"></div>';
-        // this._div.innerHTML += '<button type="button" class="btn btn-success assessCat" disabled>Assess Cat</button> </div>';
-        this._div.innerHTML += '<div class="dataSidebar"><p id="instruction-title"><b>Add Data Layers<br></p> \
-            <p id=""> \
-            <label class="switch">\
-                <input type="checkbox" id="IBA">\
-                <span class="slider round"></span>\
-            </label> Important Bird Areas</p></div>';
+        this._div.innerHTML += '<div class="dataSidebar"><p id="instruction-title"><b>Extra Data Layers<br></p> \
+                <p id=""> \
+                    <label class="switch">\
+                        <input type="checkbox" id="catLocToggle">\
+                        <span class="slider round"></span>\
+                    </label> Cat Found Locations\
+                </p>\
+                <p id="">\
+                    <label class="switch">\
+                        <input type="checkbox" id="IBAToggle">\
+                        <span class="slider round"></span>\
+                    </label> Important Bird Areas\
+                </p>\
+            </div>';
 
 		return this._div;
 	};
     sidebar.addTo(map);
+
+    // Add Legend to map
+    var legend = L.control({position: 'topright'});
+	legend.onAdd = function (map) {
+		this._div = L.DomUtil.create('div', 'legend');
+        this._div.innerHTML = '<button id="legend" type="button" class="btn btn-primary" data-toggle="collapse" data-target="#legend-collapse" aria-expanded="false" aria-controls="#legend-collapse"><i class="fa fa-list fa-lg"></i></button> \
+        <div class="row">\
+            <div class="col">\
+                <div class="collapse" id="legend-collapse">\
+                    <div id="card">\
+                        <div id="legend-title"><p><b>Wildlife Habitat Sensitivity</b></p></div>\
+                        <div id="info"><img id ="pic" src="img/high-area.PNG" style="width:50px"/><span>High Sensitivity</span></div>\
+                        <div id="info"><img id ="pic" src="img/medium-area.PNG" style="width:50px"/><span>Medium Sensitivity</span></div>\
+                        <div id="info"><img id ="pic" src="img/low-area.PNG" style="width:50px"/><span>Low Sensitivity</span></div>\
+                    </div>\
+                </div>\
+            </div>\
+        </div>';
+
+		return this._div;
+	};
+    legend.addTo(map);
 
     // Add Geocoder to the sidebar
     mapboxgl.accessToken = 'pk.eyJ1IjoianNlaWJlbDU1IiwiYSI6ImNrNmpxc3pzYTAwZXIzanZ4Nm5scHAzam0ifQ.5NLBHlevG0PL-E13Yax9NA';
@@ -133,6 +169,7 @@ function createMap(){
         countries: 'us',
         bbox: [-94, 41.5, -85, 45],
         mapboxgl: mapboxgl,
+        placeholder: 'Search Address',
     });
     geocoder.addTo('#geocoder'); 
     geocoder.on('result', function(ev) {
@@ -140,9 +177,7 @@ function createMap(){
     });
 
     // Add data layers to the map
-    // addCounties(map);
     addWildlifeAreas(map);
-    // addHistoricalCats(map);
 
 };
 
@@ -180,9 +215,18 @@ function addIBA(map){
 }
 
 // Add historical cat surrender locations
-function addHistoricalCats(map){
+function addCatLocations(map){
     // load GeoJSON file
-    
+    $.getJSON("data/Cat_Locations.json", function(response){
+        
+        catLayer = L.geoJson(response, {
+            pointToLayer: function (feature, latlng) {
+                return L.circleMarker(latlng, style.catLocStyle);
+            }
+            // style: style.catLocStyle,
+            // onEachFeature: onEachCatFeature
+        }).addTo(map);
+    });
 }
 
 //Set style for Wildlife Areas
@@ -413,7 +457,7 @@ function reportAssessment() {
     } else {
         $('body').append('<div class="results"> \
             <div id="wrapper-top"> \
-                <div><p id="results-title"><b>This location is a <span style="color:#FFEDA0">LOW RISK</span> to wildlife</b></p></div> \
+                <div><p id="results-title"><b>This location is a <span style="color:#e3d288">LOW RISK</span> to wildlife</b></p></div> \
                 <div class="closebtn" onclick="toggleResults()">&times;</div> \
             </div> \
             <div id="wrapper-bottom"> \
@@ -578,8 +622,15 @@ $('.assessCat').on('click', function(){
 });
 
 // Detect data toggle active
-
-$('input[type="checkbox"]').click(function(){
+$('#catLocToggle').click(function(){
+    if($(this).is(":checked")){
+        addCatLocations(map);
+    }
+    else if($(this).is(":not(:checked)")){
+        map.removeLayer(catLayer)
+    }
+});
+$('#IBAToggle').click(function(){
     if($(this).is(":checked")){
         addIBA(map);
     }
@@ -600,6 +651,16 @@ map.on('click', function(e) {
         showBuffer(e);
     }
 });
+
+// Legend
+$('#legend').on('mouseover',function(){
+    $('#legend').hide();
+    $('#legend-collapse').show();
+})
+$('#legend-collapse').on('mouseout',function(){
+    $('#legend-collapse').hide();
+    $('#legend').show();
+})
 
 // Open About Modal when clicked
 $('#activate-about').on('click', function(e) {
