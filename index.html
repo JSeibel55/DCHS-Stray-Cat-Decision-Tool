@@ -25,8 +25,11 @@
                         <li class="nav-item">
                             <a class="nav-link" data-toggle="modal" id="activate-about" href="">About</a>
                         </li>
-                        <li class="nav-item">
+                        <!-- <li class="nav-item">
                             <a class="nav-link" href="https://www.giveshelter.org/" target="_blank">DCHS</a>
+                        </li> -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="" onclick="handleSignInClick()">DCHS-Sign In</a>
                         </li>
                     </ul>
                 </div>
@@ -87,6 +90,75 @@
             </div>
         </div>
 
+        <!-- Save Cat Form Modal -->
+        <div class="modal fade" id="save-cat-form" tabindex="-1" role="dialog" aria-labelledby="save-cat-form" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered " role="document">
+                <div class="modal-content" id="save-cat-form-content">
+                    <div class="modal-header">
+                        <h3 class="modal-title" id="exampleModalLongTitle">Save Cat Location</h3>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        </div>
+                        <div class="modal-body">
+                            <!-- <button type="login" class="btn btn-primary mb-2 login-form" onclick="handleSignInClick()">Sign in</button>
+                            <br> -->
+                            <form>
+                                <div class="form-row">
+                                    <div class="col-5">
+                                        <input type="text" class="form-control intake-form" placeholder="Intake Type" disabled>
+                                    </div>
+                                    <div class="col-4">
+                                        <input type="text" class="form-control risk-form" placeholder="Risk Assessment" disabled>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="form-row">
+                                    <div class="col-7">
+                                        <input type="text" class="form-control street-form" placeholder="Street Address" disabled>
+                                    </div>
+                                    <div class="col">
+                                        <input type="text" class="form-control city-form" placeholder="City" disabled>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="form-row">
+                                    <div class="col-4">
+                                        <input type="text" class="form-control state-form" placeholder="State" disabled>
+                                    </div>
+                                    <div class="col-4">
+                                        <input type="text" class="form-control county-form" placeholder="County" disabled>
+                                    </div>
+                                    <div class="col-4">
+                                        <input type="text" class="form-control zip-form" placeholder="Zip" disabled>
+                                    </div>
+                                </div>
+                                <br>
+                                <label for="how-many">How many cats to add at this location:</label>
+                                <div class="form-row">
+                                    <div class="col-2">
+                                        <input type="text" id="how-many" class="form-control how-many-form" placeholder="1" disabled>
+                                    </div>
+                                </div>
+                                <!-- <br>
+                                <div class="form-row">
+                                    <div class="col-3">
+                                        <input type="text" class="form-control" placeholder="Lat" disabled>
+                                    </div>
+                                    <div class="col-3">
+                                        <input type="text" class="form-control" placeholder="Long" disabled>
+                                    </div>
+                                </div> -->
+                            </form>
+                            <br>
+                            <button type="submit" class="btn btn-primary mb-2" onclick="append()">Submit</button>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Mobil Modal -->
         <div class="modal fade" id="mobile-screen" tabindex="-1" role="dialog" aria-labelledby="mobile-screen" aria-hidden="true" data-backdrop="static">
             <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
@@ -114,9 +186,16 @@
         <script type="text/javascript" src="lib/leaflet/easy-button.js"></script>
         <script type="text/javascript" src="lib/turf.min.js"></script>
 
+        <!-- Google API -->
+        <script type="text/javascript" src="js/google-script.js"></script>
+        <script async defer src="https://apis.google.com/js/api.js" 
+            onload="this.onload=function(){};handleClientLoad()" 
+            onreadystatechange="if (this.readyState === 'complete') this.onload()">
+        </script>
+
+        <!-- Mapbox GL Geocoder -->
         <script src="https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.js"></script>
         <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.5.1/mapbox-gl-geocoder.min.js"></script>
-        
         <!-- Promise polyfill script required to use Mapbox GL Geocoder in IE 11 -->
         <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.min.js"></script>
