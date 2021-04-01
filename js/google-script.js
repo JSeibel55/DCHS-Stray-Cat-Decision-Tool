@@ -12,7 +12,7 @@ var dateAssessed = 1,
 function append() {
     var params = {
       // The ID of the spreadsheet to update.
-      spreadsheetId: '1A74v4-98JJcc9smk7MfahIzdaGp1NvxkK9pHhSoAjTE',  // TODO: Update placeholder value.
+      spreadsheetId: config.spreadsheetId,  // TODO: Update placeholder value.
 
       // The A1 notation of a range to search for a logical table of data.
       // Values will be appended after the last row of the table.
@@ -67,13 +67,14 @@ function initClient() {
     var SCOPE = 'https://www.googleapis.com/auth/spreadsheets';
 
     gapi.client.init({
-        'apiKey': API_KEY,
-        'clientId': CLIENT_ID,
+        'apiKey': config.API_KEY,
+        'clientId': config.CLIENT_ID,
         'scope': SCOPE,
         'discoveryDocs': ['https://sheets.googleapis.com/$discovery/rest?version=v4'],
     }).then(function() {
         gapi.auth2.getAuthInstance().isSignedIn.listen(updateSignInStatus);
-        updateSignInStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
+        updateSignInStatus(gapi.auth2.getAuthInstance().isSignedIn);
+
     });
 }
 

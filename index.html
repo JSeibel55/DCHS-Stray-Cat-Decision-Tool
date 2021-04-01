@@ -179,12 +179,24 @@
         <!-- Map -->
         <div id="map" ></div>
 
+        <!-- Data -->
+        <script type="text/javascript" src="data/Wildlife_Areas.js"></script>
+
         <!--- External script links --->
         <script type="text/javascript" src="lib/jquery-3.5.1.js"></script>
         <script type="text/javascript" src="lib/bootstrap-4.0.0/js/bootstrap.bundle.min.js"></script>
         <script type="text/javascript" src="lib/leaflet/leaflet.js"></script>
         <script type="text/javascript" src="lib/leaflet/easy-button.js"></script>
         <script type="text/javascript" src="lib/turf.min.js"></script>
+        <!-- Mapbox GL Geocoder -->
+        <script src="https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.js"></script>
+        <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.5.1/mapbox-gl-geocoder.min.js"></script>
+        <!-- Promise polyfill script required to use Mapbox GL Geocoder in IE 11 -->
+        <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.min.js"></script>
+
+
+        <script type='text/javascript' src='js/config.js'></script>
 
         <!-- Google API -->
         <script type="text/javascript" src="js/google-script.js"></script>
@@ -193,16 +205,6 @@
             onreadystatechange="if (this.readyState === 'complete') this.onload()">
         </script>
 
-        <!-- Mapbox GL Geocoder -->
-        <script src="https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.js"></script>
-        <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.5.1/mapbox-gl-geocoder.min.js"></script>
-        <!-- Promise polyfill script required to use Mapbox GL Geocoder in IE 11 -->
-        <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.min.js"></script>
-
-        <!-- Data -->
-        <script type="text/javascript" src="data/Wildlife_Areas.js"></script>
-        
         <script type="text/javascript" src="js/main.js"></script>
     </body>
 </html>
