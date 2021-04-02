@@ -44,8 +44,8 @@ body{
   margin: 0 1px 10px -5px;
 }
 .saveCatBtn {
-  margin: 0 1px 10px 10px;
-  display: none;
+  margin: 0 1px 10px 0;
+  visibility: hidden;
 }
 
 .leaflet-container a {

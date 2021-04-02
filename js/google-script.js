@@ -74,7 +74,7 @@ function initClient() {
     }).then(function() {
         gapi.auth2.getAuthInstance().isSignedIn.listen(updateSignInStatus);
         updateSignInStatus(gapi.auth2.getAuthInstance().isSignedIn);
-
+        $(".saveCatBtn").css("visibility", "visible");
     });
 }
 
@@ -84,7 +84,7 @@ function handleClientLoad() {
 
 function updateSignInStatus(isSignedIn) {
     if (isSignedIn) {
-        $(".saveCatBtn").css("display", "block");
+        $(".saveCatBtn").css("visibility", "visible");
     }
 }
 
