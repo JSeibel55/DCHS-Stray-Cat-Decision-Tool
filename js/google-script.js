@@ -54,9 +54,9 @@ function append() {
 }
 
 function initClient() {
-  var API_KEY = 'AIzaSyCIn5QKQ5Lrxori6s3JdOa6HrMaZ-V2csQ';  // TODO: Update placeholder with desired API key.
+  var API_KEY = config.API_KEY;  // TODO: Update placeholder with desired API key.
 
-  var CLIENT_ID = '932350423623-67h32k723eilu87sltovvk5reklceb6g.apps.googleusercontent.com';  // TODO: Update placeholder with desired client ID.
+  var CLIENT_ID = config.CLIENT_ID;  // TODO: Update placeholder with desired client ID.
 
   // TODO: Authorize using one of the following scopes:
   //   'https://www.googleapis.com/auth/drive'
@@ -67,13 +67,11 @@ function initClient() {
   var SCOPE = 'https://www.googleapis.com/auth/spreadsheets';
 
   gapi.client.init({
-    'apiKey': config.API_KEY,
-    'clientId': config.CLIENT_ID,
+    'apiKey': API_KEY,
+    'clientId': CLIENT_ID,
     'scope': SCOPE,
     'discoveryDocs': ['https://sheets.googleapis.com/$discovery/rest?version=v4'],
   }).then(function() {
-    $(".saveCatBtn").css("visibility", "visible");
-    console.log("Logged in")
     gapi.auth2.getAuthInstance().isSignedIn.listen(updateSignInStatus);
     updateSignInStatus(gapi.auth2.getAuthInstance().isSignedIn);
   });
@@ -92,6 +90,8 @@ function updateSignInStatus(isSignedIn) {
 
 function handleSignInClick(event) {
   gapi.auth2.getAuthInstance().signIn();
+  $(".saveCatBtn").css("visibility", "visible");
+  console.log("Logged in")
 }
 
 function handleSignOutClick(event) {
