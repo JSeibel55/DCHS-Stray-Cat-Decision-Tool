@@ -12,7 +12,7 @@ var dateAssessed = 1,
 function append() {
   var params = {
     // The ID of the spreadsheet to update.
-    spreadsheetId: spreadsheetId,  // TODO: Update placeholder value.
+    spreadsheetId: '1A74v4-98JJcc9smk7MfahIzdaGp1NvxkK9pHhSoAjTE',  // TODO: Update placeholder value.
 
     // The A1 notation of a range to search for a logical table of data.
     // Values will be appended after the last row of the table.
@@ -56,9 +56,9 @@ function append() {
 }
 
 function initClient() {
-  var API_KEY = API_KEY;  // TODO: Update placeholder with desired API key.
+  var API_KEY = 'AIzaSyCIn5QKQ5Lrxori6s3JdOa6HrMaZ-V2csQ';  // TODO: Update placeholder with desired API key.
 
-  var CLIENT_ID = CLIENT_ID;  // TODO: Update placeholder with desired client ID.
+  var CLIENT_ID = '932350423623-67h32k723eilu87sltovvk5reklceb6g.apps.googleusercontent.com';  // TODO: Update placeholder with desired client ID.
 
   // TODO: Authorize using one of the following scopes:
   //   'https://www.googleapis.com/auth/drive'
