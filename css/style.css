@@ -12,6 +12,8 @@ body{
   z-index: 1;
 }
 
+/** Navbar **/
+
 /** Sidebar **/
 .sidebar {
 	/* position: fixed; */

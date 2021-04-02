@@ -25,11 +25,16 @@
                         <li class="nav-item">
                             <a class="nav-link" data-toggle="modal" id="activate-about" href="">About</a>
                         </li>
-                        <!-- <li class="nav-item">
-                            <a class="nav-link" href="https://www.giveshelter.org/" target="_blank">DCHS</a>
-                        </li> -->
-                        <li class="nav-item">
-                            <a class="nav-link" href="" onclick="handleSignInClick()">DCHS-Sign In</a>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              DCHS
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" id="signin-button" href="" onclick="handleSignInClick()">DCHS - Sign In</a>
+                                <a class="dropdown-item" id="signout-button" href="" onclick="handleSignOutClick()">DCHS - Sign Out</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="https://www.giveshelter.org/" target="_blank">DCHS Website</a>
+                            </div>
                         </li>
                     </ul>
                 </div>
@@ -104,40 +109,42 @@
                             <!-- <button type="login" class="btn btn-primary mb-2 login-form" onclick="handleSignInClick()">Sign in</button>
                             <br> -->
                             <form>
+                                <label>Cat Details: </label>
                                 <div class="form-row">
-                                    <div class="col-5">
-                                        <input type="text" class="form-control intake-form" placeholder="Intake Type" disabled>
-                                    </div>
                                     <div class="col-4">
-                                        <input type="text" class="form-control risk-form" placeholder="Risk Assessment" disabled>
+                                        <input type="text" class="form-control intake-form" placeholder="Intake Type">
+                                    </div>
+                                    <div class="col-5">
+                                        <input type="text" class="form-control risk-form" placeholder="Risk Assessment">
                                     </div>
                                 </div>
                                 <br>
+                                <label>Cat Location: </label>
                                 <div class="form-row">
                                     <div class="col-7">
-                                        <input type="text" class="form-control street-form" placeholder="Street Address" disabled>
+                                        <input type="text" class="form-control street-form" placeholder="Street Address">
                                     </div>
                                     <div class="col">
-                                        <input type="text" class="form-control city-form" placeholder="City" disabled>
+                                        <input type="text" class="form-control city-form" placeholder="City">
                                     </div>
                                 </div>
                                 <br>
                                 <div class="form-row">
                                     <div class="col-4">
-                                        <input type="text" class="form-control state-form" placeholder="State" disabled>
+                                        <input type="text" class="form-control state-form" placeholder="State">
                                     </div>
                                     <div class="col-4">
-                                        <input type="text" class="form-control county-form" placeholder="County" disabled>
+                                        <input type="text" class="form-control county-form" placeholder="County">
                                     </div>
                                     <div class="col-4">
-                                        <input type="text" class="form-control zip-form" placeholder="Zip" disabled>
+                                        <input type="text" class="form-control zip-form" placeholder="Zip">
                                     </div>
                                 </div>
                                 <br>
                                 <label for="how-many">How many cats to add at this location:</label>
                                 <div class="form-row">
                                     <div class="col-2">
-                                        <input type="text" id="how-many" class="form-control how-many-form" placeholder="1" disabled>
+                                        <input type="text" id="how-many" class="form-control how-many-form" placeholder="1">
                                     </div>
                                 </div>
                                 <!-- <br>
@@ -152,7 +159,7 @@
                             </form>
                             <br>
                             <button type="submit" class="btn btn-primary mb-2" onclick="append()">Submit</button>
-                            
+                            <button type="done" class="btn btn-primary mb-2" data-dismiss="modal">Done</button>
                         </div>
                     </div>
                 </div>
