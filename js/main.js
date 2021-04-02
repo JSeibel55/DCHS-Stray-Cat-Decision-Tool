@@ -119,12 +119,11 @@ function createMap(){
 		this._div = L.DomUtil.create('div', 'main-sidebar');
         this._div.innerHTML = '<div class="sidebar"> <p id="instruction-title"><b>Assess potential risk to wildlife<br></p> \
             <p id="instuction">Click "Add Cat" to be begin. Then click on the map or search by address to add a cat\'s location to the map.</p> \
-            <button type="button" id="addCatBtn" class="btn btn-secondary addCatBtn">Add Cat</button> \
-            <button type="button" class="btn btn-secondary removeCatBtn" disabled>Remove Cat</button><br> \
+            <button type="button" id="addCat" class="btn btn-secondary addCat">Add Cat</button> \
+            <button type="button" class="btn btn-secondary removeCat" disabled>Remove Cat</button><br> \
             <div id="geocoder" class="geocoder"></div> \
             <p id="instuction">Once a cat\'s location is on the map, click "Assess Cat" to bring up a wildlife risk assessment at the location.</p> \
-            <button type="button" class="btn btn-success assessCatBtn" disabled>Assess Cat</button>\
-            <button type="button" class="btn btn-info saveCatBtn" disabled>Save Cat</button> </div>';
+            <button type="button" class="btn btn-success assessCat" disabled>Assess Cat</button> </div>';
         this._div.innerHTML += '<div class="dataSidebar"><p id="instruction-title"><b>Extra Data Layers<br></p> \
                 <p id=""> \
                     <label class="switch">\
@@ -219,7 +218,7 @@ function addIBA(map){
 }
 
 // Add historical cat surrender locations
-function addPastCatLocations(map){
+function addCatLocations(map){
     // load GeoJSON file
     $.getJSON("data/Cat_Locations.json", function(response){
         
@@ -343,9 +342,8 @@ function addMarker(e){
     if (catLocation != null) {
         map.removeLayer(catLocation);
     }
-    $('.removeCatBtn').prop("disabled", false);
-    $('.assessCatBtn').prop("disabled", false);
-    $('.saveCatBtn').prop("disabled", false);
+    $('.removeCat').prop("disabled", false);
+    $('.assessCat').prop("disabled", false);
 
     catLocation = new L.marker(e.latlng, {icon: catIcon}).addTo(map);
 }
@@ -530,9 +528,8 @@ function geocode(ev) {
     if (allowLoc == true) {
         var center = [ev.result.center[1],ev.result.center[0]]
 
-        $('.removeCatBtn').prop("disabled", false);
-        $('.assessCatBtn').prop("disabled", false);
-        $('.saveCatBtn').prop("disabled", false);
+        $('.removeCat').prop("disabled", false);
+        $('.assessCat').prop("disabled", false);
 
         var overlayCenter = L.latLng(center);
         var mapZoom = 14;
@@ -594,18 +591,17 @@ function toggleResults() {
 $(document).ready(createMap());
 
 // Click Events for Buttons in sidebar
-$('.addCatBtn').on('click', function(){
-    $("#addCatBtn").toggleClass('btn-primary btn-secondary');
+$('.addCat').on('click', function(){
+    $("#addCat").toggleClass('btn-primary btn-secondary');
     $( ".results" ).remove();
     $( ".results-collapsed" ).remove();
     resultsVisible = false;
     allowLoc = true;
 });
-$('.removeCatBtn').on('click', function(){
-    $("#addCatBtn").toggleClass('btn-secondary btn-primary');
-    $('.removeCatBtn').prop("disabled", true);
-    $('.assessCatBtn').prop("disabled", true);
-    $('.saveCatBtn').prop("disabled", true);
+$('.removeCat').on('click', function(){
+    $("#addCat").toggleClass('btn-secondary btn-primary');
+    $('.removeCat').prop("disabled", true);
+    $('.assessCat').prop("disabled", true);
     allowLoc = false;
 
     map.removeLayer(catLocation);
@@ -616,12 +612,12 @@ $('.removeCatBtn').on('click', function(){
     $( ".results" ).remove();
     $( ".results-collapsed" ).remove();
 });
-$('.assessCatBtn').on('click', function(){
+$('.assessCat').on('click', function(){
     $( ".results" ).remove();
     $( ".results-collapsed" ).remove();
     allowLoc = false;
-    $('.assessCatBtn').prop("disabled", true);
-    $('.addCatBtn').prop("disabled", false);
+    $('.assessCat').prop("disabled", true);
+    $('.addCat').prop("disabled", false);
 
     checkIntersection();
     reportAssessment();
@@ -631,11 +627,10 @@ $('.saveCatBtn').on('click', function(){
     $('#save-cat-form').modal('show');
 });
 
-
 // Detect data toggle active
 $('#catLocToggle').click(function(){
     if($(this).is(":checked")){
-        addPastCatLocations(map);
+        addCatLocations(map);
     }
     else if($(this).is(":not(:checked)")){
         map.removeLayer(catLayer)
