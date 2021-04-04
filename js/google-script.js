@@ -1,7 +1,7 @@
 // Google Sheets API functions
 
 // Append a row of new data to the bottom of the Google Sheet
-function append() {
+function append(dateAssessed, intakeType, riskLevel, streetAddress, city, zipCode, state, county) {
   var params = {
     // The ID of the spreadsheet to update.
     spreadsheetId: '1A74v4-98JJcc9smk7MfahIzdaGp1NvxkK9pHhSoAjTE',  // TODO: Update placeholder value.

@@ -607,15 +607,13 @@ function gatherData () {
     zipCode = $("#zip-form").val();
     state = $("#state-form").val();
     county = $("#county-form").val();
-
-    console.log(dateAssessed);
     
     var counter = $("#how-many").val();
     if (!(counter > 0)) {
       counter = 1;
     }
     for (i = 0; i < counter; i++) {
-      append();
+      append(dateAssessed, intakeType, riskLevel, streetAddress, city, zipCode, state, county);
     }  
   }
 
