@@ -630,16 +630,6 @@ $('.assessCatBtn').on('click', function(){
 $('.saveCatBtn').on('click', function(){
     $('#save-cat-form').modal('show');
 });
-$('.login-form').on('click', function(){
-    $('.intake-form').prop("disabled", false);
-    $('.risk-form').prop("disabled", false);
-    $('.street-form').prop("disabled", false);
-    $('.city-form').prop("disabled", false);
-    $('.state-form').prop("disabled", false);
-    $('.county-form').prop("disabled", false);
-    $('.zip-form').prop("disabled", false);
-    $('.how-many-form').prop("disabled", false);
-});
 
 // Detect data toggle active
 $('#catLocToggle').click(function(){
