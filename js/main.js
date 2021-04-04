@@ -128,17 +128,17 @@ function createMap(){
             <button type="button" class="btn btn-success assessCatBtn" disabled>Assess Cat</button>\
             <button type="button" class="btn btn-info saveCatBtn" disabled>Save Cat</button> </div>';
         this._div.innerHTML += '<div class="dataSidebar"><p id="instruction-title"><b>Extra Data Layers<br></p> \
-                <p id=""> \
-                    <label class="switch">\
-                        <input type="checkbox" id="catLocToggle">\
-                        <span class="slider round"></span>\
-                    </label> Cat Found Locations\
-                </p>\
                 <p id="">\
                     <label class="switch">\
                         <input type="checkbox" id="IBAToggle">\
                         <span class="slider round"></span>\
                     </label> Important Bird Areas\
+                </p>\
+                <p id="pastCatLocations"> \
+                    <label class="switch">\
+                        <input type="checkbox" id="catLocToggle">\
+                        <span class="slider round"></span>\
+                    </label> Cat Found Locations\
                 </p>\
             </div>';
 
@@ -583,14 +583,14 @@ function geocode(ev) {
 
 // Collect the data on the cat submission form before appending to Google Sheet
 function gatherData () {
-    var dateAssessed = 1,
-    intakeType = 2,
-    riskLevel = 3,
-    streetAddress = 4,
-    city = 5,
-    zipCode = 6,
-    state = 7,
-    county = 8;
+    var dateAssessed = "",
+    intakeType = "",
+    riskLevel = "",
+    streetAddress = "",
+    city = "",
+    zipCode = "",
+    state = "",
+    county ="";
 
     var currentdate = new Date(); 
     dateAssessed = (currentdate.getMonth()+1) + "/"
