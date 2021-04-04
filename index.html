@@ -112,39 +112,39 @@
                                 <label>Type of Cat and Assessment</label>
                                 <div class="form-row">
                                     <div class="col-4">
-                                        <input type="text" class="form-control intake-form" placeholder="Intake Type">
+                                        <input type="text" id="intake-form" class="form-control" placeholder="Intake Type">
                                     </div>
                                     <div class="col-5">
-                                        <input type="text" class="form-control risk-form" placeholder="Risk Assessment">
+                                        <input type="text" id="risk-form" class="form-control" placeholder="Risk Assessment">
                                     </div>
                                 </div>
                                 <br>
                                 <label>Location Information:</label>
                                 <div class="form-row">
                                     <div class="col-7">
-                                        <input type="text" class="form-control street-form" placeholder="Street Address">
+                                        <input type="text" id="street-form" class="form-control" placeholder="Street Address">
                                     </div>
                                     <div class="col">
-                                        <input type="text" class="form-control city-form" placeholder="City">
+                                        <input type="text" id="city-form" class="form-control" placeholder="City">
                                     </div>
                                 </div>
                                 <br>
                                 <div class="form-row">
                                     <div class="col-4">
-                                        <input type="text" class="form-control state-form" placeholder="State">
+                                        <input type="text" id="state-form" class="form-control" placeholder="State">
                                     </div>
                                     <div class="col-4">
-                                        <input type="text" class="form-control county-form" placeholder="County">
+                                        <input type="text" id="county-form" class="form-control" placeholder="County">
                                     </div>
                                     <div class="col-4">
-                                        <input type="text" class="form-control zip-form" placeholder="Zip">
+                                        <input type="text" id="zip-form" class="form-control" placeholder="Zip">
                                     </div>
                                 </div>
                                 <br>
                                 <label for="how-many">How many cats to add at this location:</label>
                                 <div class="form-row">
                                     <div class="col-2">
-                                        <input type="text" id="how-many" class="form-control how-many-form" placeholder="1">
+                                        <input type="text" id="how-many" class="form-control" placeholder="1">
                                     </div>
                                 </div>
                                 <!-- <br>
@@ -158,7 +158,7 @@
                                 </div> -->
                             </form>
                             <br>
-                            <button type="submit" class="btn btn-primary mb-2" onclick="append()">Submit</button>
+                            <button type="submit" class="btn btn-primary mb-2" onclick="gatherData()">Submit</button>
                             <button type="done" class="btn btn-primary mb-2" data-dismiss="modal">Done</button>
                             
                         </div>

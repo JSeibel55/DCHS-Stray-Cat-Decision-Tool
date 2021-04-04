@@ -1,6 +1,7 @@
 //Global Variables
 var map;
-// var wildlifeAreaFeatures;
+var catLatitude;
+var catLongitude;
 var riskValue = null; // Highest level assessed for the location
 var areasWithin1200 = []; // List of wildlife areas within 1200 m at risk due to cats location
 var areasWithin400 = []; // List of wildlife areas within 400 m at risk due to cats location
@@ -16,6 +17,7 @@ var catIcon = L.icon({
     iconSize:     [35, 40], // size of the icon
     iconAnchor:   [20, 30], // point of the icon which will correspond to marker's location
 });
+
 // Styles for Features
 var style = {
     'countyStyle' : {
@@ -546,7 +548,9 @@ function geocode(ev) {
         map.fitBounds(bbox);
 
         catLocation = new L.marker(center, {icon: catIcon}).addTo(map);
-        eventLngLat = [ev.result.center[0],ev.result.center[1]];
+        eventLngLat = [ev.result.center[0], ev.result.center[1]];
+        catLongitude = ev.result.center[0];
+        catLatitude = ev.result.center[1];
 
         if (catAreaMax != null) {
             map.removeLayer(catAreaMax);
@@ -576,6 +580,42 @@ function geocode(ev) {
         map.fitBounds(bbox);
     }
 }
+
+// Collect the data on the cat submission form before appending to Google Sheet
+function gatherData () {
+    var dateAssessed = 1,
+    intakeType = 2,
+    riskLevel = 3,
+    streetAddress = 4,
+    city = 5,
+    zipCode = 6,
+    state = 7,
+    county = 8;
+
+    var currentdate = new Date(); 
+    dateAssessed = (currentdate.getMonth()+1) + "/"
+                  + currentdate.getDate() + "/" 
+                  + currentdate.getFullYear() + " "  
+                  + currentdate.getHours() + ":"  
+                  + currentdate.getMinutes() + ":" 
+                  + currentdate.getSeconds();
+  
+    intakeType = $("#intake-form").val();
+    riskLevel = $("#risk-form").val();
+    streetAddress = $("#street-form").val();
+    city = $("#city-form").val();
+    zipCode = $("#zip-form").val();
+    state = $("#state-form").val();
+    county = $("#county-form").val();
+    
+    var counter = $("#how-many").val();
+    if (!(counter > 0)) {
+      counter = 1;
+    }
+    for (i = 0; i < counter; i++) {
+      append();
+    }  
+  }
 
 // Toggle hide/display the Results window
 function toggleResults() {
@@ -657,6 +697,8 @@ $('div.sidebar').click(function(e){
 // Map click
 map.on('click', function(e) {
     if(allowLoc == true){
+        catLongitude = e.latlng.lng;
+        catLatitude = e.latlng.lat;
         addMarker(e);
         showBuffer(e);
     }

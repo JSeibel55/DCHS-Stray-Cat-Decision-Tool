@@ -1,14 +1,6 @@
-var dateAssessed = 1,
-    intakeType = 2,
-    riskLevel = 3,
-    streetAddress = 4,
-    city = 5,
-    zipCode = 6,
-    state = 7,
-    county = 8,
-    latitude = 9,
-    longitude = 10;
+// Google Sheets API functions
 
+// Append a row of new data to the bottom of the Google Sheet
 function append() {
   var params = {
     // The ID of the spreadsheet to update.
@@ -25,9 +17,6 @@ function append() {
     insertDataOption: 'INSERT_ROWS',  // TODO: Update placeholder value.
   };
 
-  riskLevel = $(".risk-form").val();
-  console.log(riskValue);
-
   var valueRangeBody = {
     // TODO: Add desired properties to the request body.
       "majorDimension": "ROWS",
@@ -41,8 +30,8 @@ function append() {
           zipCode,
           state,
           county,
-          latitude,
-          longitude
+          catLatitude,
+          catLongitude
         ]
       ]
   };
