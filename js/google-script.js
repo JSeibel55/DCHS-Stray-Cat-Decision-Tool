@@ -17,8 +17,6 @@ function append(dateAssessed, intakeType, riskLevel, streetAddress, city, zipCod
     insertDataOption: 'INSERT_ROWS',  // TODO: Update placeholder value.
   };
 
-  console.log(dateAssessed);
-
   var valueRangeBody = {
     // TODO: Add desired properties to the request body.
       "majorDimension": "ROWS",
