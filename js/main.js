@@ -607,6 +607,8 @@ function gatherData () {
     zipCode = $("#zip-form").val();
     state = $("#state-form").val();
     county = $("#county-form").val();
+
+    console.log(dateAssessed);
     
     var counter = $("#how-many").val();
     if (!(counter > 0)) {

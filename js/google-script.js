@@ -17,6 +17,8 @@ function append() {
     insertDataOption: 'INSERT_ROWS',  // TODO: Update placeholder value.
   };
 
+  console.log(dateAssessed);
+
   var valueRangeBody = {
     // TODO: Add desired properties to the request body.
       "majorDimension": "ROWS",
