@@ -33,7 +33,7 @@
                               DCHS
                             </a>
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" id="signin-button" href="" onclick="handleSignInClick()">DCHS - Sign In</a>
+                                <a class="dropdown-item g-signin2" id="signin-button" href="" data-onsuccess="onSignIn" onclick="handleSignInClick()">DCHS - Sign In</a>
                                 <a class="dropdown-item" id="signout-button" href="" onclick="handleSignOutClick()">DCHS - Sign Out</a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="https://www.giveshelter.org/" target="_blank">DCHS Website</a>
@@ -202,10 +202,9 @@
         <script async defer src="https://apis.google.com/js/api.js" 
             onload="this.onload=function(){};handleClientLoad()" 
             onreadystatechange="if (this.readyState === 'complete') this.onload()">
-        </script>
-
+        </script>  
         
-
+        <script src="https://apis.google.com/js/platform.js" async defer></script>
 
         <!-- Mapbox GL Geocoder -->
         <script src="https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.js"></script>
