@@ -25,7 +25,7 @@ function append() {
     insertDataOption: 'INSERT_ROWS',  // TODO: Update placeholder value.
   };
 
-  riskLevel = $(".risk-form").val();
+  // riskLevel = $(".risk-form").val();
 
   var valueRangeBody = {
     // TODO: Add desired properties to the request body.
