@@ -12,6 +12,7 @@ var catAreaAvg = null; // Visual Feature of avg cat home range
 var catAreaAvgPoly = null; // Polygon of avg cat home range
 var allowLoc = false;  // Allow cat location to be put on map, false allows clicking of wildlife areas
 var resultsVisible = false; // If the results tab is visible on the screen
+var pastCatLocations;
 var catIcon = L.icon({
     iconUrl: 'img/cat.png',
     iconSize:     [35, 40], // size of the icon
@@ -217,16 +218,16 @@ function addIBA(map){
 // Add historical cat surrender locations
 function addPastCatLocations(map){
     // load GeoJSON file
-    $.getJSON("data/Cat_Locations.json", function(response){
+    // $.getJSON("data/Cat_Locations.json", function(response){
         
-        catLayer = L.geoJson(response, {
+        catLayer = L.geoJson(pastCatLocations, {
             pointToLayer: function (feature, latlng) {
                 return L.circleMarker(latlng, style.catLocStyle);
             }
             // style: style.catLocStyle,
             // onEachFeature: onEachCatFeature
         }).addTo(map);
-    });
+    // });
 }
 
 //Set style for Wildlife Areas
@@ -627,12 +628,13 @@ function arrayToJSONObject(arr){
         var d = data[i];
         console.log(d[9])
         var prop = {};
-        var record = {"type":"Feature","geometry":{"type":"Point","coordinates":[data[i].Latitude,data[i].Longitude]},"properties":prop};
+        var record = {"type":"Feature","geometry":{"type":"Point","coordinates":[d[9],d[10]]},"properties":prop};
         for (var j=0; j<l; j++)
                 prop[cols[j]] = d[j];
         formatted.push(record);
     }
-    // console.log(formatted);
+    console.log(formatted);
+    pastCatLocations = formatted;
 }
 
 // Toggle hide/display the Results window
