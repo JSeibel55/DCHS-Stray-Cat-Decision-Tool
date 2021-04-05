@@ -299,7 +299,7 @@ function wildlifePolyPopup(e) {
 // Creates text for the popups in the wildlife area prop symbols
 function createwildlifePopupContent(properties){
     //add name to popup content string
-    var popupContent = "<p class='popup-wildlife-feature-name'><b>" + properties.NAME + "</b></p>";
+    var popupContent = "<p class='popup-feature-name'><b>" + properties.NAME + "</b></p>";
 
     //add formatted attribute to panel content string
     popupContent += "<p class='popup-detail'>Owner: <b><span id=''>" + properties.OWNER + "</span></b></p>";
@@ -316,8 +316,8 @@ function createwildlifePopupContent(properties){
 //Event listeners for highlighing the past cat features
 function onEachCatFeature(feature, layer) {
     layer.on({
-        mouseover: highlightFeature,
-        mouseout: resetHighlight,
+        // mouseover: highlightFeature,
+        // mouseout: resetHighlight,
         click: pastCatLocPopup
     });
 }
@@ -338,12 +338,13 @@ function pastCatLocPopup(e) {
 // Creates text for the popups in the past cat locations
 function createPastCatPopupContent(properties){
     //add name to popup content string
-    var popupContent = "<p class='popup-wildlife-feature-name'><b>" + properties["INTAKE TYPE"] + "</b></p>";
+    var popupContent = "<p class='popup-feature-name'><b>" + properties["Intake Type"] + "</b></p>";
 
     //add formatted attribute to panel content string
-    popupContent += "<p class='popup-detail'>Date Assessed: <b><span id=''>" + properties["Date Assessed"] + "</span></b></p>";
+    if (properties["Date Assessed"].length > 0) {
+        popupContent += "<p class='popup-detail'>Date Assessed: <b><span id=''>" + properties["Date Assessed"] + "</span></b></p>";
+    }
     popupContent += "<p class='popup-detail'>Street: <b>" + properties["Street Address"]+ "</b></p>";
-    popupContent += "<p class='popup-detail'>Lat: <b>" + properties.Latitude+ "</b></p>";
 
     return popupContent;
 }
@@ -668,7 +669,7 @@ function arrayToJSONObject(arr){
     for (var i=0; i<data.length; i++) {
         var d = data[i];
         var prop = {};
-        var record = {"type":"Feature","geometry":{"type":"Point","coordinates":[parseFloat(d[9]),parseFloat(d[8])]},"properties":prop};
+        var record = {"type":"Feature","geometry":{"type":"Point","coordinates":[parseFloat(d["Longitude"]),parseFloat(d["Latitude"])]},"properties":prop};
         for (var j=0; j<l; j++)
                 prop[cols[j]] = d[j];
         formatted.push(record);
