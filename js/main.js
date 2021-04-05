@@ -554,6 +554,17 @@ function createResultsTable(withinList, location) {
     $('.results-table').append(table);
     $('.results-table').append('<br>');
 }
+// Toggle hide/display the Results window
+function toggleResults() {
+    if (resultsVisible == true) {
+        $('.results').hide();
+        resultsVisible = false;
+    }
+    else if (resultsVisible == false) {
+        $('.results').show();
+        resultsVisible = true;
+    }
+}
 
 // Overrides the Mapbox Geocoder to add a cat icon, buffer, and zoom to location
 function geocode(ev) {
@@ -649,7 +660,6 @@ function gatherData () {
       append(dateAssessed, intakeType, riskLevel, streetAddress, city, zipCode, state, county);
     }  
 }
-
 //javascript create JSON object from two dimensional Array
 function arrayToJSONObject(arr){
     //header
@@ -672,7 +682,7 @@ function arrayToJSONObject(arr){
     }
     pastCatLocations = {"type":"FeatureCollection", "features": formatted}
 }
-
+// Add/show the Past Cat Data toggle after signin
 function addPastCatToggle() {
     $(".saveCatBtn").css("visibility", "visible");
     $(".dataSidebar").append(
@@ -682,19 +692,17 @@ function addPastCatToggle() {
                 <span class="slider round"></span>\
             </label> Cat Found Locations\
         </p>')
+    $('#catLocToggle').click(function(){
+        if($(this).is(":checked")){
+            addPastCatLocations(map);
+        }
+        else if($(this).is(":not(:checked)")){
+            map.removeLayer(catLayer)
+        }
+    });
 }
 
-// Toggle hide/display the Results window
-function toggleResults() {
-    if (resultsVisible == true) {
-        $('.results').hide();
-        resultsVisible = false;
-    }
-    else if (resultsVisible == false) {
-        $('.results').show();
-        resultsVisible = true;
-    }
-}
+
 
 
 /// Create Map
@@ -739,14 +747,14 @@ $('.saveCatBtn').on('click', function(){
 });
 
 // Detect data toggle active
-$('#catLocToggle').click(function(){
-    if($(this).is(":checked")){
-        addPastCatLocations(map);
-    }
-    else if($(this).is(":not(:checked)")){
-        map.removeLayer(catLayer)
-    }
-});
+// $('#catLocToggle').click(function(){
+//     if($(this).is(":checked")){
+//         addPastCatLocations(map);
+//     }
+//     else if($(this).is(":not(:checked)")){
+//         map.removeLayer(catLayer)
+//     }
+// });
 $('#IBAToggle').click(function(){
     if($(this).is(":checked")){
         addIBA(map);
