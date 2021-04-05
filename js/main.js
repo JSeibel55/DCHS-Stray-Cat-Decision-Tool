@@ -135,12 +135,6 @@ function createMap(){
                         <span class="slider round"></span>\
                     </label> Important Bird Areas\
                 </p>\
-                <p id="pastCatLocations"> \
-                    <label class="switch">\
-                        <input type="checkbox" id="catLocToggle">\
-                        <span class="slider round"></span>\
-                    </label> Cat Found Locations\
-                </p>\
             </div>';
 
 		return this._div;
@@ -344,6 +338,9 @@ function createPastCatPopupContent(properties){
         popupContent += "<p class='popup-detail'>Date Assessed: <b><span id=''>" + properties["Date Assessed"] + "</span></b></p>";
     }
     popupContent += "<p class='popup-detail'>Street: <b>" + properties["Street Address"]+ "</b></p>";
+    if (properties["City"].length > 0) {
+        popupContent += "<p class='popup-detail'>City: <b><span id=''>" + properties["City"] + "</span></b></p>";
+    }
 
     return popupContent;
 }
@@ -674,6 +671,17 @@ function arrayToJSONObject(arr){
         formatted.push(record);
     }
     pastCatLocations = {"type":"FeatureCollection", "features": formatted}
+}
+
+function addPastCatToggle() {
+    $(".saveCatBtn").css("visibility", "visible");
+    $(".dataSidebar").append(
+      '<p id="pastCatLocations"> \
+            <label class="switch">\
+                <input type="checkbox" id="catLocToggle">\
+                <span class="slider round"></span>\
+            </label> Cat Found Locations\
+        </p>')
 }
 
 // Toggle hide/display the Results window
