@@ -135,12 +135,6 @@ function createMap(){
                         <span class="slider round"></span>\
                     </label> Important Bird Areas\
                 </p>\
-                <p id="pastCatLocations"> \
-                    <label class="switch">\
-                        <input type="checkbox" id="catLocToggle">\
-                        <span class="slider round"></span>\
-                    </label> Cat Found Locations\
-                </p>\
             </div>';
 
 		return this._div;
@@ -225,13 +219,10 @@ function addIBA(map){
 function addPastCatLocations(map){
     // load GeoJSON file
     // $.getJSON("data/Cat_Locations.json", function(response){
-        // console.log(response)});
-        console.log("variable contents")
-        console.log(pastCatLocations);
         
         catLayer = L.geoJson(pastCatLocations, {
             pointToLayer: function (feature, latlng) {
-                return L.circleMarker(latlng, style.catLocStyle);
+                return L.circleMarker(latlng, style.catLocStyle, onEachCatFeature);
             }
             // style: style.catLocStyle,
             // onEachFeature: onEachCatFeature
@@ -312,6 +303,41 @@ function createwildlifePopupContent(properties){
     if (properties.WEBSITE.length > 0) {
         popupContent += "<p class='popup-detail'>More Info: <b><a href="+ properties.WEBSITE +" target='_blank'> Website </a></b></p>";
     }
+
+    return popupContent;
+}
+
+//Event listeners for highlighing the past cat features
+function onEachCatFeature(feature, layer) {
+    layer.on({
+        mouseover: highlightFeature,
+        mouseout: resetHighlight,
+        click: pastCatLocPopup
+    });
+}
+// Creates and activates a popup for the past cat features
+function pastCatLocPopup(e) {
+    if (allowLoc == false) {
+        var poly = e.target.feature;
+
+        //Create the popup content for the combined dataset layer
+        var popupContent = createPastCatPopupContent(poly.properties);
+
+        //bind the popup to the polygon
+        e.target.bindPopup(popupContent, {
+            offset: new L.Point(0,0)
+        }).openPopup();
+    }
+}
+// Creates text for the popups in the past cat locations
+function createPastCatPopupContent(properties){
+    //add name to popup content string
+    var popupContent = "<p class='popup-wildlife-feature-name'><b>" + properties["INTAKE TYPE"] + "</b></p>";
+
+    //add formatted attribute to panel content string
+    popupContent += "<p class='popup-detail'>Date Assessed: <b><span id=''>" + properties["Date Assessed"] + "</span></b></p>";
+    popupContent += "<p class='popup-detail'>Street: <b>" + properties["Street Address"]+ "</b></p>";
+    popupContent += "<p class='popup-detail'>Lat: <b>" + properties.Latitude+ "</b></p>";
 
     return popupContent;
 }
@@ -641,9 +667,7 @@ function arrayToJSONObject(arr){
                 prop[cols[j]] = d[j];
         formatted.push(record);
     }
-    formatted = {"type":"FeatureCollection", "features": formatted}
-    // console.log(formatted);
-    pastCatLocations = formatted;
+    pastCatLocations = {"type":"FeatureCollection", "features": formatted}
 }
 
 // Toggle hide/display the Results window
