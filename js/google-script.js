@@ -40,9 +40,38 @@ function append(dateAssessed, intakeType, riskLevel, streetAddress, city, zipCod
   request.then(function(response) {
     // TODO: Change code below to process the `response` object:
     // console.log(response.result);
-    $(".submission-form").append('<p>Submitted!</p>');
+
   }, function(reason) {
     console.error('error: ' + reason.result.error.message);
+  });
+}
+
+function get() {
+  var params = {
+      // The ID of the spreadsheet to retrieve data from.
+      spreadsheetId: '1A74v4-98JJcc9smk7MfahIzdaGp1NvxkK9pHhSoAjTE',  // TODO: Update placeholder value.
+
+      // The A1 notation of the values to retrieve.
+      range: 'Sheet1',  // TODO: Update placeholder value.
+
+      // How values should be represented in the output.
+      // The default render option is ValueRenderOption.FORMATTED_VALUE.
+      // valueRenderOption: '',  // TODO: Update placeholder value.
+
+      // How dates, times, and durations should be represented in the output.
+      // This is ignored if value_render_option is
+      // FORMATTED_VALUE.
+      // The default dateTime render option is [DateTimeRenderOption.SERIAL_NUMBER].
+      // dateTimeRenderOption: '',  // TODO: Update placeholder value.
+  };
+
+  var request = gapi.client.sheets.spreadsheets.values.get(params);
+  request.then(function(response) {
+      // TODO: Change code below to process the `response` object:
+      console.log(response);
+
+  }, function(reason) {
+      console.error('error: ' + reason.result.error.message);
   });
 }
 
@@ -94,11 +123,3 @@ function handleSignInClick(event) {
 function handleSignOutClick(event) {
   gapi.auth2.getAuthInstance().signOut();
 }
-
-// function onSignIn(googleUser) {
-//   var profile = googleUser.getBasicProfile();
-//   console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-//   console.log('Name: ' + profile.getName());
-//   console.log('Image URL: ' + profile.getImageUrl());
-//   console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
-// }

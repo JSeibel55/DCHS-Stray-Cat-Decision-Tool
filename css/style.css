@@ -14,7 +14,6 @@ z-index: 1;
 
 /** Sidebar **/
 .sidebar {
-/* position: fixed; */
 padding: 5px 20px 5px 20px;
 font: 20px/22px 'Open Sans', arial, sans-serif;
 background: rgba(255,255,255, 1);
@@ -25,7 +24,7 @@ left:0px;
 top: calc(100% - 56px) + 5px;
 width: 20vw;
 }
-/** Styling within sidebar **/
+/* Styling within sidebar */
 #instruction-title {
 margin: 5px 0 20px 0;
 font-size: 2.5vh;
@@ -45,7 +44,7 @@ margin: 0 1px 10px -5px;
 }
 .saveCatBtn {
 margin: 0 1px 10px 10px;
-visibility: hidden;
+/* visibility: hidden; */
 }
 
 .leaflet-container a {
@@ -125,6 +124,11 @@ border-radius: 34px;
 }
 .slider.round:before {
 border-radius: 50%;
+}
+
+/** Submission Form **/
+#confirm-submission {
+  margin: 10px 0 0 0;
 }
 
 /** Legend **/
