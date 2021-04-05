@@ -224,9 +224,9 @@ function addIBA(map){
 // Add historical cat surrender locations
 function addPastCatLocations(map){
     // load GeoJSON file
-    $.getJSON("data/Cat_Locations.json", function(response){
-        console.log(response)});
-        
+    // $.getJSON("data/Cat_Locations.json", function(response){
+        // console.log(response)});
+    $.getJSON(pastCatLocations, function(response){
         catLayer = L.geoJson(pastCatLocations, {
             pointToLayer: function (feature, latlng) {
                 return L.circleMarker(latlng, style.catLocStyle);
@@ -234,7 +234,7 @@ function addPastCatLocations(map){
             // style: style.catLocStyle,
             // onEachFeature: onEachCatFeature
         }).addTo(map);
-    // });
+    });
 }
 
 //Set style for Wildlife Areas
