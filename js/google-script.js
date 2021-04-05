@@ -108,13 +108,13 @@ function updateSignInStatus(isSignedIn) {
   if (isSignedIn) {
     get();
     $(".saveCatBtn").css("visibility", "visible");
-    $(".dataSidebar").append(
-      '<p id="pastCatLocations"> \
-            <label class="switch">\
-                <input type="checkbox" id="catLocToggle">\
-                <span class="slider round"></span>\
-            </label> Cat Found Locations\
-        </p>')
+    // $(".dataSidebar").append(
+    //   '<p id="pastCatLocations"> \
+    //         <label class="switch">\
+    //             <input type="checkbox" id="catLocToggle">\
+    //             <span class="slider round"></span>\
+    //         </label> Cat Found Locations\
+    //     </p>')
   }
 }
 
