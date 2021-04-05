@@ -609,7 +609,29 @@ function gatherData () {
     for (i = 0; i < counter; i++) {
       append(dateAssessed, intakeType, riskLevel, streetAddress, city, zipCode, state, county);
     }  
-  }
+}
+
+//javascript create JSON object from two dimensional Array
+function arrayToJSONObject(arr){
+    //header
+    var keys = arr[0];
+ 
+    //vacate keys from main array
+    var newArr = arr.slice(1, arr.length);
+ 
+    var formatted = [],
+    data = newArr,
+    cols = keys,
+    l = cols.length;
+    for (var i=0; i<data.length; i++) {
+            var d = data[i],
+                    o = {};
+            for (var j=0; j<l; j++)
+                    o[cols[j]] = d[j];
+            formatted.push(o);
+    }
+    console.log(formatted);
+}
 
 // Toggle hide/display the Results window
 function toggleResults() {

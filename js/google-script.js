@@ -68,7 +68,8 @@ function get() {
   var request = gapi.client.sheets.spreadsheets.values.get(params);
   request.then(function(response) {
       // TODO: Change code below to process the `response` object:
-      console.log(response.result.values);
+      // console.log(response.result.values);
+      arrayToJSONObject(response.result.values);
 
   }, function(reason) {
       console.error('error: ' + reason.result.error.message);
