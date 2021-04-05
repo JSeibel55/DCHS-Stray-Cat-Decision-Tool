@@ -134,12 +134,6 @@ function createMap(){
                         <span class="slider round"></span>\
                     </label> Important Bird Areas\
                 </p>\
-                <p id="pastCatLocations"> \
-                    <label class="switch">\
-                        <input type="checkbox" id="catLocToggle">\
-                        <span class="slider round"></span>\
-                    </label> Cat Found Locations\
-                </p>\
             </div>';
 
 		return this._div;
