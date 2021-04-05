@@ -259,6 +259,7 @@ line-height: 20px;
 .popup-detail {
   font-size: 14px;
   line-height: 2px;
+  overflow: auto;
 }
 
 /*** L.easyButton ***/
