@@ -625,13 +625,14 @@ function arrayToJSONObject(arr){
     l = cols.length;
     for (var i=0; i<data.length; i++) {
         var d = data[i];
+        console.log(data[i])
         var prop = {};
         var record = {"type":"Feature","geometry":{"type":"Point","coordinates":[data[i].Latitude,data[i].Longitude]},"properties":prop};
         for (var j=0; j<l; j++)
                 prop[cols[j]] = d[j];
         formatted.push(record);
     }
-    console.log(formatted);
+    // console.log(formatted);
 }
 
 // Toggle hide/display the Results window
