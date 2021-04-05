@@ -218,7 +218,8 @@ function addIBA(map){
 // Add historical cat surrender locations
 function addPastCatLocations(map){
     // load GeoJSON file
-    // $.getJSON("data/Cat_Locations.json", function(response){
+    $.getJSON("data/Cat_Locations.json", function(response){
+        console.log(response)});
         
         catLayer = L.geoJson(pastCatLocations, {
             pointToLayer: function (feature, latlng) {
@@ -626,7 +627,7 @@ function arrayToJSONObject(arr){
     l = cols.length;
     for (var i=0; i<data.length; i++) {
         var d = data[i];
-        console.log(d.Latitude)
+        console.log(d[Latitude])
         var prop = {};
         var record = {"type":"Feature","geometry":{"type":"Point","coordinates":[parseFloat(d[8]),parseFloat(d[9])]},"properties":prop};
         for (var j=0; j<l; j++)
