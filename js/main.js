@@ -626,9 +626,9 @@ function arrayToJSONObject(arr){
     l = cols.length;
     for (var i=0; i<data.length; i++) {
         var d = data[i];
-        console.log(d[9])
+        console.log(d.Latitude)
         var prop = {};
-        var record = {"type":"Feature","geometry":{"type":"Point","coordinates":[d[9],d[10]]},"properties":prop};
+        var record = {"type":"Feature","geometry":{"type":"Point","coordinates":[d[8],d[9]]},"properties":prop};
         for (var j=0; j<l; j++)
                 prop[cols[j]] = d[j];
         formatted.push(record);
