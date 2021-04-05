@@ -254,11 +254,14 @@ font-weight:bold;
 }
 .popup-feature-name {
   font-size: 22px;
-  line-height: 20px;
+  line-height: 25px;
+  padding-bottom: 20px;
 }
 .popup-detail {
   font-size: 14px;
-  margin: 2px;
+}
+.leaflet-popup-content p {
+  margin: 2px 0 2px 0;
 }
 
 /*** L.easyButton ***/

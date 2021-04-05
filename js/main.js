@@ -225,7 +225,6 @@ function addIBA(map){
 function addPastCatLocations(map){
     // load GeoJSON file
     // $.getJSON("data/Cat_Locations.json", function(response){
-        console.log(pastCatLocations)
         
         catLayer = L.geoJson(pastCatLocations, {
             pointToLayer: function (feature, latlng) {
