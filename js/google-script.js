@@ -39,7 +39,8 @@ function append(dateAssessed, intakeType, riskLevel, streetAddress, city, zipCod
   var request = gapi.client.sheets.spreadsheets.values.append(params, valueRangeBody);
   request.then(function(response) {
     // TODO: Change code below to process the `response` object:
-    console.log(response.result);
+    // console.log(response.result);
+    $(".submission-form").append('<p>Submitted!</p>');
   }, function(reason) {
     console.error('error: ' + reason.result.error.message);
   });
@@ -83,7 +84,6 @@ function updateSignInStatus(isSignedIn) {
                 <span class="slider round"></span>\
             </label> Cat Found Locations\
         </p>')
-    $("#pastCatLocations").css("visibility", "visible");
   }
 }
 
