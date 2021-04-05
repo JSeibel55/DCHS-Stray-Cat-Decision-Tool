@@ -626,15 +626,16 @@ function arrayToJSONObject(arr){
     l = cols.length;
     for (var i=0; i<data.length; i++) {
         var d = data[i];
-        console.log(d["Latitude"])
+        console.log(d[i]["Latitude"])
         var prop = {};
         var record = {"type":"Feature","geometry":{"type":"Point","coordinates":[parseFloat(d[8]),parseFloat(d[9])]},"properties":prop};
         for (var j=0; j<l; j++)
                 prop[cols[j]] = d[j];
         formatted.push(record);
     }
+    formatted = {"type":"FeatureCollection", "features": formatted}
     console.log(formatted);
-    pastCatLocations = formatted;
+    pastCatLocations = {"type":"FeatureCollection", "features": formatted};
 }
 
 // Toggle hide/display the Results window
