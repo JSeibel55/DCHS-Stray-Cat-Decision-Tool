@@ -105,6 +105,7 @@ function handleClientLoad() {
 
 function updateSignInStatus(isSignedIn) {
   if (isSignedIn) {
+    get();
     $(".saveCatBtn").css("visibility", "visible");
     $(".dataSidebar").append(
       '<p id="pastCatLocations"> \

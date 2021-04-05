@@ -44,7 +44,7 @@ margin: 0 1px 10px -5px;
 }
 .saveCatBtn {
 margin: 0 1px 10px 10px;
-/* visibility: hidden; */
+visibility: hidden;
 }
 
 .leaflet-container a {
