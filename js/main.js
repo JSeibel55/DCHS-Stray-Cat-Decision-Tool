@@ -229,10 +229,9 @@ function addPastCatLocations(map){
         
         catLayer = L.geoJson(pastCatLocations, {
             pointToLayer: function (feature, latlng) {
-                return L.circleMarker(latlng, style.catLocStyle, onEachCatFeature);
-            }
-            // style: style.catLocStyle,
-            // onEachFeature: onEachCatFeature
+                return L.circleMarker(latlng, style.catLocStyle);
+            },
+            onEachFeature: onEachCatFeature
         }).addTo(map);
     // });
 }
