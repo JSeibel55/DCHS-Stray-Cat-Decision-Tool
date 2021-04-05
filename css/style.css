@@ -249,8 +249,8 @@ font-weight:bold;
 
 /* Popup Info */
 .popup-iba-feature-name {
-font-size: 18px;
-line-height: 20px;
+  font-size: 18px;
+  line-height: 20px;
 }
 .popup-feature-name {
   font-size: 22px;
@@ -258,7 +258,7 @@ line-height: 20px;
 }
 .popup-detail {
   font-size: 14px;
-  line-height: 20px;
+  margin: 2px;
 }
 
 /*** L.easyButton ***/
