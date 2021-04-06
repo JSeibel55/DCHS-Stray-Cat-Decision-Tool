@@ -120,7 +120,7 @@ function createMap(){
     var sidebar = L.control({position: 'topleft'});
 	sidebar.onAdd = function (map) {
 		this._div = L.DomUtil.create('div', 'main-sidebar');
-        this._div.innerHTML = '<div class="sidebar"> <p id="instruction-title"><b>Assess potential risk to wildlife<br></p> \
+        this._div.innerHTML = '<div class="sidebar"> <p id="instruction-title"><b>Assess Potential Risk to Wildlife<br></p> \
             <p id="instuction">Click "Add Cat" to be begin. Then click on the map or search by address to add a cat\'s location to the map.</p> \
             <button type="button" id="addCatBtn" class="btn btn-secondary addCatBtn">Add Cat</button> \
             <button type="button" class="btn btn-secondary removeCatBtn" disabled>Remove Cat</button><br> \
