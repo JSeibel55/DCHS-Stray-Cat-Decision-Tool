@@ -189,7 +189,6 @@ input:checked + .slider:before {
 .results {
   z-index: 3;
   position: absolute;
-  /* padding: 10px 40px 5px 40px; */
   font: 18px/20px 'Open Sans', arial, sans-serif;
   background: rgba(255,255,255, 1);
   box-shadow: 0 0 15px rgba(0,0,0,0.2);
