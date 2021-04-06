@@ -214,6 +214,7 @@ function addIBA(map){
             style: style.ibaStyle,
             onEachFeature: onEachIBAFeature
         }).addTo(map);
+        pastCatLayer.bringToFront();
     });
 }
 
@@ -228,6 +229,7 @@ function addPastCatLocations(map){
             },
             onEachFeature: onEachCatFeature
         }).addTo(map);
+        pastCatLayer.bringToFront();
     // });
 }
 
