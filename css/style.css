@@ -12,6 +12,7 @@ body{
   z-index: 1;
 }
 
+/** Navbar **/
 .navbar {
   background-color: #493269;
 }
@@ -23,8 +24,8 @@ body{
   background: rgba(255,255,255, 1);
   box-shadow: 0 0 15px rgba(0,0,0,0.2);
   border-radius: 5px;
-  text-align:left;
-  left:0px;
+  text-align: left;
+  left: 0px;
   top: calc(100% - 56px) + 5px;
   max-width: 250px;
 }

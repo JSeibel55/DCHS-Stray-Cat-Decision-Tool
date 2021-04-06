@@ -12,7 +12,9 @@ var catAreaAvg = null; // Visual Feature of avg cat home range
 var catAreaAvgPoly = null; // Polygon of avg cat home range
 var allowLoc = false;  // Allow cat location to be put on map, false allows clicking of wildlife areas
 var resultsVisible = false; // If the results tab is visible on the screen
-var pastCatLocations;
+var pastCatLocations; // GeoJSON that is read from the Google Sheets 
+var IBALayer; // IBA layer on the map
+var pastCatLayer; // Past cat locations layer on the map
 var catIcon = L.icon({
     iconUrl: 'img/cat.png',
     iconSize:     [35, 40], // size of the icon
@@ -220,7 +222,7 @@ function addPastCatLocations(map){
     // load GeoJSON file
     // $.getJSON("data/Cat_Locations.json", function(response){
         
-        catLayer = L.geoJson(pastCatLocations, {
+        pastCatLayer = L.geoJson(pastCatLocations, {
             pointToLayer: function (feature, latlng) {
                 return L.circleMarker(latlng, style.catLocStyle);
             },
@@ -697,24 +699,24 @@ function addPastCatToggle() {
             addPastCatLocations(map);
         }
         else if($(this).is(":not(:checked)")){
-            map.removeLayer(catLayer)
+            map.removeLayer(pastCatLayer)
         }
     });
 }
 
-/// Create Map
+/// Create Map ///
 $(document).ready(createMap());
 
 // Click Events for Buttons in sidebar
 $('.addCatBtn').on('click', function(){
-    $("#addCatBtn").toggleClass('btn-primary btn-secondary');
+    $("#addCatBtn").removeClass('btn-secondary').addClass('btn-primary');
     $( ".results" ).remove();
     $( ".results-collapsed" ).remove();
     resultsVisible = false;
     allowLoc = true;
 });
 $('.removeCatBtn').on('click', function(){
-    $("#addCatBtn").toggleClass('btn-secondary btn-primary');
+    $("#addCatBtn").removeClass('btn-primary').addClass('btn-secondary');
     $('.removeCatBtn').prop("disabled", true);
     $('.assessCatBtn').prop("disabled", true);
     $('.saveCatBtn').prop("disabled", true);
@@ -753,8 +755,11 @@ $('#IBAToggle').click(function(){
     }
 });
 
-// Prevent click through the sidebar
+// Prevent click through sidebars to map
 $('div.sidebar').click(function(e){
+    e.stopPropagation();
+});
+$('div.dataSidebar').click(function(e){
     e.stopPropagation();
 });
 
