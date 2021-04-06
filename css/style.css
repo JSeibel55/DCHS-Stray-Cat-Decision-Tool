@@ -4,51 +4,55 @@ body{
 
 /*** Primary Containers ***/
 #map {
-position: absolute;
-bottom:0;
-left:0;
-width: 100%;
-height: calc(100% - 56px);
-z-index: 1;
+  position: absolute;
+  bottom:0;
+  left:0;
+  width: 100%;
+  height: calc(100% - 56px);
+  z-index: 1;
+}
+
+.navbar {
+  background-color: #493269;
 }
 
 /** Sidebar **/
 .sidebar {
-padding: 5px 20px 5px 20px;
-font: 20px/22px 'Open Sans', arial, sans-serif;
-background: rgba(255,255,255, 1);
-box-shadow: 0 0 15px rgba(0,0,0,0.2);
-border-radius: 5px;
-text-align:left;
-left:0px;
-top: calc(100% - 56px) + 5px;
-width: 20vw;
+  padding: 5px 20px 5px 20px;
+  font: 20px/22px 'Open Sans', arial, sans-serif;
+  background: rgba(255,255,255, 1);
+  box-shadow: 0 0 15px rgba(0,0,0,0.2);
+  border-radius: 5px;
+  text-align:left;
+  left:0px;
+  top: calc(100% - 56px) + 5px;
+  max-width: 250px;
 }
 /* Styling within sidebar */
 #instruction-title {
-margin: 5px 0 20px 0;
-font-size: 2.5vh;
+  margin: 5px 0 20px 0;
+  font-size: 1em;
 }
 #instruction {
-margin: 0 0 0 0;
-font-size: 2vh;
+  margin: 0 0 0 0;
+  font-size: 2vh;
 }
 .addCatBtn {
-margin: 0 1px 0 -5px;
+  margin: 0 1px 0 -5px;
 }
 .removeCatBtn {
-margin: 0 1px 0 10px;
+  margin: 0 1px 0 5px;
 }
 .assessCatBtn {
-margin: 0 1px 10px -5px;
+  margin: 0 1px 10px -5px;
 }
 .saveCatBtn {
-margin: 0 1px 10px 10px;
-visibility: hidden;
+  margin: 0 1px 10px 5px;
+  visibility: hidden;
 }
 
 .leaflet-container a {
-width: 30vw;
+  width: 30vw;
 }
 
 /* Geolocator */
@@ -63,67 +67,67 @@ width: 30vw;
 
 /** Data Sidebar **/
 .dataSidebar {
-padding: 5px 5px 1px 10px;
-font: 20px/22px 'Open Sans', arial, sans-serif;
-background: rgba(255,255,255, 1);
-box-shadow: 0 0 15px rgba(0,0,0,0.2);
-border-radius: 5px;
-text-align: left;
-left:0px;
-width:15vw;
-margin-top: 10px;
+  padding: 5px 15px 1px 10px;
+  font: 20px/22px 'Open Sans', arial, sans-serif;
+  background: rgba(255,255,255, 1);
+  box-shadow: 0 0 15px rgba(0,0,0,0.2);
+  border-radius: 5px;
+  text-align: left;
+  left: 0px;
+  margin-top: 10px;
+  display: inline-block;
 }
 
 .switch {
-position: relative;
-display: inline-block;
-width: 40px;
-height: 24px;
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 24px;
 }
 .switch input { 
-opacity: 0;
-width: 0;
-height: 0;
+  opacity: 0;
+  width: 0;
+  height: 0;
 }
 .slider {
-position: absolute;
-cursor: pointer;
-top: 0;
-left: 0;
-right: 0;
-bottom: 0;
-background-color: #ccc;
--webkit-transition: .4s;
-transition: .4s;
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
 }
 .slider:before {
-position: absolute;
-content: "";
-height: 16px;
-width: 16px;
-left: 4px;
-bottom: 4px;
-background-color: white;
--webkit-transition: .4s;
-transition: .4s;
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
 }
 input:checked + .slider {
-background-color: #2196F3;
+  background-color: #2196F3;
 }
 input:focus + .slider {
-box-shadow: 0 0 1px #2196F3;
+  box-shadow: 0 0 1px #2196F3;
 }
 input:checked + .slider:before {
--webkit-transform: translateX(16px);
--ms-transform: translateX(16px);
-transform: translateX(16px);
+  -webkit-transform: translateX(16px);
+  -ms-transform: translateX(16px);
+  transform: translateX(16px);
 }
 /* Rounded sliders */
 .slider.round {
-border-radius: 34px;
+  border-radius: 34px;
 }
 .slider.round:before {
-border-radius: 50%;
+  border-radius: 50%;
 }
 
 /** Submission Form **/
@@ -133,124 +137,124 @@ border-radius: 50%;
 
 /** Legend **/
 #legend{
-position: relative;
-border: 2px solid #ccc;
-background-color: white;
-border-radius: 5px;
-z-index: 1;
-width: 35px;
-height: 35px;
-padding: 5px;
-color: #000000;
-z-index: 999;
-font-family: 'Open Sans', arial, sans-serif;
-font-size: 16px;
+  position: relative;
+  border: 2px solid #ccc;
+  background-color: white;
+  border-radius: 5px;
+  z-index: 1;
+  width: 35px;
+  height: 35px;
+  padding: 5px;
+  color: #000000;
+  z-index: 999;
+  font-family: 'Open Sans', arial, sans-serif;
+  font-size: 16px;
 }
 #legend-collapse{
-position: relative;
-width: 200px;
-border: 2px solid #ccc;
-border-radius: 5px;
-z-index: 1;
-overflow: hidden;
-z-index: 999;
+  position: relative;
+  width: 200px;
+  border: 2px solid #ccc;
+  border-radius: 5px;
+  z-index: 1;
+  overflow: hidden;
+  z-index: 999;
 }
 #card{
-background-color: white;
-padding: 0.5rem;
+  background-color: white;
+  padding: 0.5rem;
 }
 #pic{
-float: left;
-margin-right: 10px;
-margin-bottom: 5px;
-filter: drop-shadow(2px 2px 2px #222);
+  float: left;
+  margin-right: 10px;
+  margin-bottom: 5px;
+  filter: drop-shadow(2px 2px 2px #222);
 }
 #info{
-display: inline-block;
-align-items: center;
-line-height: 1em
+  display: inline-block;
+  align-items: center;
+  line-height: 1em
 }
 #info span{
-font-family: 'Open Sans', arial, sans-serif;
-font-size: 1.5em;
+  font-family: 'Open Sans', arial, sans-serif;
+  font-size: 1.5em;
 }
 #legend-title b {
-font-family: 'Open Sans', arial, sans-serif;
-font-size: 1.5em;
-line-height: 1em;
+  font-family: 'Open Sans', arial, sans-serif;
+  font-size: 1.5em;
+  line-height: 1em;
 }
 
 /** Results **/
 .results {
-z-index: 3;
-position: absolute;
-/* padding: 10px 40px 5px 40px; */
-font: 18px/20px 'Open Sans', arial, sans-serif;
-background: rgba(255,255,255, 1);
-box-shadow: 0 0 15px rgba(0,0,0,0.2);
-border-radius: 4px;
-text-align:left;
-left: 15vw;
-bottom: 0;
-width: 70vw;
+  z-index: 3;
+  position: absolute;
+  /* padding: 10px 40px 5px 40px; */
+  font: 18px/20px 'Open Sans', arial, sans-serif;
+  background: rgba(255,255,255, 1);
+  box-shadow: 0 0 15px rgba(0,0,0,0.2);
+  border-radius: 4px;
+  text-align:left;
+  left: 15vw;
+  bottom: 0;
+  width: 70vw;
 }
 .results-collapsed {
-z-index: 2;
-position: absolute;
-font: 18px 'Open Sans', arial, sans-serif;
-background: rgba(255,255,255, 1);
-box-shadow: 0 0 15px rgba(0,0,0,0.2);
-border-radius: 5px;
-bottom: 10px;
-padding: 4px;
-border: 2px solid #ccc;
-left: 45vw;
-cursor: pointer;
+  z-index: 2;
+  position: absolute;
+  font: 18px 'Open Sans', arial, sans-serif;
+  background: rgba(255,255,255, 1);
+  box-shadow: 0 0 15px rgba(0,0,0,0.2);
+  border-radius: 5px;
+  bottom: 10px;
+  padding: 4px;
+  border: 2px solid #ccc;
+  left: 45vw;
+  cursor: pointer;
 }
 #wrapper-top {
-overflow: hidden;
+  overflow: hidden;
+  width: 100%;
 }
 #results-title {
-padding: 10px 0 0 12vw;
-font-size: 4vh;
-text-align: center;
-float:left;
+  padding: 10px 0 0 0;
+  font-size: 1.5em;
+  text-align: center;
 }
 #wrapper-top .closebtn {
-float:right;
-margin: 0;
-padding: 7px;
-font-size: 5vh;
-cursor: pointer;
+  float:right;
+  margin: 0;
+  padding: 0.2em;
+  font-size: 2em;
+  cursor: pointer;
 }
 #wrapper-bottom {
-padding: 10px 40px 5px 40px;
+  padding: 10px 40px 5px 40px;
 }
 .results-table {
-max-height: 30vh;
-overflow: auto;
+  max-height: 30vh;
+  overflow: auto;
 }
 th, td, p, input {
-font: 14px Verdana;
+  font: 14px Verdana;
 }
 table {
-margin: 0 10px 0 0;
+  margin: 0 10px 0 0;
 }
 table, th, td 
 {
-border: solid 1px #DDD;
-border-collapse: collapse;
-padding: 2px 3px;
-text-align: center;
+  border: solid 1px #DDD;
+  border-collapse: collapse;
+  padding: 2px 3px;
+  text-align: center;
 }
 th {
-font-weight:bold;
+  font-weight:bold;
 }
 
 /* Popup Info */
 .popup-iba-feature-name {
-  font-size: 18px;
-  line-height: 20px;
+    font-size: 18px;
+    line-height: 20px;
 }
 .popup-feature-name {
   font-size: 22px;
@@ -267,61 +271,61 @@ font-weight:bold;
 /*** L.easyButton ***/
 .leaflet-bar button,
 .leaflet-bar button:hover {
-background-color: #fff;
-border: none;
-padding: 0px;
-border-bottom: 1px solid #ccc;
-width: 26px;
-height: 27px;
-line-height: 26px;
-display: block;
-text-align: center;
-text-decoration: none;
-color: black;
+  background-color: #fff;
+  border: none;
+  padding: 0px;
+  border-bottom: 1px solid #ccc;
+  width: 26px;
+  height: 27px;
+  line-height: 26px;
+  display: block;
+  text-align: center;
+  text-decoration: none;
+  color: black;
 }
 .leaflet-bar button {
-background-position: 50% 50%;
-background-repeat: no-repeat;
-overflow: hidden;
-display: block;
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+  overflow: hidden;
+  display: block;
 }
 .leaflet-bar button:hover {
-background-color: #f4f4f4;
+  background-color: #f4f4f4;
 }
 .leaflet-bar button:first-of-type {
-border-top-left-radius: 4px;
-border-top-right-radius: 4px;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
 }
 .leaflet-bar button:last-of-type {
-border-bottom-left-radius: 4px;
-border-bottom-right-radius: 4px;
-border-bottom: none;
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+  border-bottom: none;
 }
 .leaflet-bar.disabled,
 .leaflet-bar button.disabled {
-cursor: default;
-pointer-events: none;
-opacity: .4;
+  cursor: default;
+  pointer-events: none;
+  opacity: .4;
 }
 .easy-button-button .button-state{
-display: block;
-width: 100%;
-height: 100%;
-position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  position: relative;
 }
 .leaflet-touch .leaflet-bar button {
-width: 30px;
-height: 30px;
-line-height: 30px;
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
 }
 
 /* Modal that activates if user is on mobile device*/
 #mobile-screen {
-background-color: #e6e6e6;
+  background-color: #e6e6e6;
 }
 #mobile-screen-content {
-background-color:#b6b6b6;
-text-align: center;
-margin: auto;
-width: 80vw;
+  background-color:#b6b6b6;
+  text-align: center;
+  margin: auto;
+  width: 80vw;
 }

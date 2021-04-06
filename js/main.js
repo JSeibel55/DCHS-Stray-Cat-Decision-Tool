@@ -477,8 +477,8 @@ function reportAssessment() {
     if (riskValue == 3) {
         $('body').append('<div class="results"> \
             <div id="wrapper-top"> \
-                <div><p id="results-title"><b>This location is a <span style="color:#800026">HIGH RISK</span> to wildlife</b></p></div> \
                 <div class="closebtn" onclick="toggleResults()">&times;</div> \
+                <div><p id="results-title"><b>This location is a <span style="color:#800026">HIGH RISK</span> to wildlife</b></p></div> \
             </div> \
             <div id="wrapper-bottom"> \
                 <div class="results-table"></div> \
@@ -487,8 +487,8 @@ function reportAssessment() {
     } else if (riskValue == 2) {
         $('body').append('<div class="results"> \
             <div id="wrapper-top"> \
-                <div><p id="results-title"><b>This location is a <span style="color:#FD8D3C">MEDIUM RISK</span> to wildlife</b></p></div> \
                 <div class="closebtn" onclick="toggleResults()">&times;</div> \
+                <div><p id="results-title"><b>This location is a <span style="color:#FD8D3C">MEDIUM RISK</span> to wildlife</b></p></div> \
             </div> \
             <div id="wrapper-bottom"> \
                 <div class="results-table"></div> \
@@ -497,8 +497,8 @@ function reportAssessment() {
     } else {
         $('body').append('<div class="results"> \
             <div id="wrapper-top"> \
-                <div><p id="results-title"><b>This location is a <span style="color:#e3d288">LOW RISK</span> to wildlife</b></p></div> \
                 <div class="closebtn" onclick="toggleResults()">&times;</div> \
+                <div><p id="results-title"><b>This location is a <span style="color:#e3d288">LOW RISK</span> to wildlife</b></p></div> \
             </div> \
             <div id="wrapper-bottom"> \
                 <div class="results-table"></div> \
@@ -702,9 +702,6 @@ function addPastCatToggle() {
     });
 }
 
-
-
-
 /// Create Map
 $(document).ready(createMap());
 
@@ -747,14 +744,6 @@ $('.saveCatBtn').on('click', function(){
 });
 
 // Detect data toggle active
-// $('#catLocToggle').click(function(){
-//     if($(this).is(":checked")){
-//         addPastCatLocations(map);
-//     }
-//     else if($(this).is(":not(:checked)")){
-//         map.removeLayer(catLayer)
-//     }
-// });
 $('#IBAToggle').click(function(){
     if($(this).is(":checked")){
         addIBA(map);
