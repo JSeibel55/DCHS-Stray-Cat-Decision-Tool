@@ -66,8 +66,8 @@ var style = {
 //Function to instantiate the Leaflet map
 function createMap(){
     //create the map
-    var southWest = L.latLng(41.5, -94);  
-    var northEast = L.latLng(45, -85);	
+    var southWest = L.latLng(41.5, -95);  
+    var northEast = L.latLng(48, -85);	
     var bounds = L.latLngBounds(southWest, northEast);
     map = L.map('map', {
         center: [43.05,-89.4],
@@ -733,15 +733,23 @@ $('.removeCatBtn').on('click', function(){
     $( ".results-collapsed" ).remove();
 });
 $('.assessCatBtn').on('click', function(){
-    $( ".results" ).remove();
-    $( ".results-collapsed" ).remove();
-    allowLoc = false;
-    $('.assessCatBtn').prop("disabled", true);
-    $('.addCatBtn').prop("disabled", false);
+    $("#loadingScreen").css("display", "block");
+    $("#spinner").css("display", "block");  
 
-    checkIntersection();
-    reportAssessment();
-    resultsVisible = true;
+    setTimeout(function() { // allow spinner to load before work starts
+        $( ".results" ).remove();
+        $( ".results-collapsed" ).remove();
+        allowLoc = false;
+        $('.assessCatBtn').prop("disabled", true);
+        $('.addCatBtn').prop("disabled", false);
+
+        checkIntersection();
+        reportAssessment();
+        resultsVisible = true;
+
+        $("#spinner").css("display", "none");
+        $("#loadingScreen").css("display", "none");
+    },100);
 });
 $('.saveCatBtn').on('click', function(){
     $('#save-cat-form').modal('show');
