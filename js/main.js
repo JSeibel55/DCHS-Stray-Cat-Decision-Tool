@@ -13,8 +13,8 @@ var catAreaAvgPoly = null; // Polygon of avg cat home range
 var allowLoc = false;  // Allow cat location to be put on map, false allows clicking of wildlife areas
 var resultsVisible = false; // If the results tab is visible on the screen
 var pastCatLocations; // GeoJSON that is read from the Google Sheets 
-var IBALayer; // IBA layer on the map
-var pastCatLayer; // Past cat locations layer on the map
+var IBALayer = null; // IBA layer on the map
+var pastCatLayer = null; // Past cat locations layer on the map
 var catIcon = L.icon({
     iconUrl: 'img/cat.png',
     iconSize:     [35, 40], // size of the icon
@@ -214,7 +214,9 @@ function addIBA(map){
             style: style.ibaStyle,
             onEachFeature: onEachIBAFeature
         }).addTo(map);
-        pastCatLayer.bringToFront();
+        if (pastCatLayer != null) {
+            pastCatLayer.bringToFront();
+        }
     });
 }
 
