@@ -40,6 +40,9 @@ function append(dateAssessed, intakeType, riskLevel, streetAddress, city, zipCod
   request.then(function(response) {
     // TODO: Change code below to process the `response` object:
     // console.log(response.result);
+    $('#submitBtn').on('click', function(){
+      $('#submit-window').modal('show');
+    });
 
   }, function(reason) {
     console.error('error: ' + reason.result.error.message);
