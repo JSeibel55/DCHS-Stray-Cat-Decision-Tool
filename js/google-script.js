@@ -41,6 +41,7 @@ function append(dateAssessed, intakeType, riskLevel, streetAddress, city, zipCod
     // TODO: Change code below to process the `response` object:
     // console.log(response.result);
     $('#submitBtn').on('click', function(){
+      $('#save-cat-form').modal('hide');
       $('#submit-window').modal('show');
     });
 
