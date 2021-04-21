@@ -51,10 +51,10 @@ function append(dateAssessed, intakeType, riskLevel, streetAddress, city, zipCod
 function get() {
   var params = {
       // The ID of the spreadsheet to retrieve data from.
-      spreadsheetId: '1A74v4-98JJcc9smk7MfahIzdaGp1NvxkK9pHhSoAjTE',  // TODO: Update placeholder value.
+      spreadsheetId: '1L-O4XFF3SPQChxfyqeevAhyi1hZV_atNXfzArlbhlNo',  // TODO: Update placeholder value.
 
       // The A1 notation of the values to retrieve.
-      range: 'Sheet1',  // TODO: Update placeholder value.
+      range: 'Data',  // TODO: Update placeholder value.
 
       // How values should be represented in the output.
       // The default render option is ValueRenderOption.FORMATTED_VALUE.
