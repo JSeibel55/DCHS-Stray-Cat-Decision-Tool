@@ -4,11 +4,11 @@
 function append(dateAssessed, intakeType, riskLevel, streetAddress, city, zipCode, state, county) {
   var params = {
     // The ID of the spreadsheet to update.
-    spreadsheetId: '1A74v4-98JJcc9smk7MfahIzdaGp1NvxkK9pHhSoAjTE',  // TODO: Update placeholder value.
+    spreadsheetId: '1L-O4XFF3SPQChxfyqeevAhyi1hZV_atNXfzArlbhlNo',  // TODO: Update placeholder value.
 
     // The A1 notation of a range to search for a logical table of data.
     // Values will be appended after the last row of the table.
-    range: 'Sheet1',  // TODO: Update placeholder value.
+    range: 'Data',  // TODO: Update placeholder value.
 
     // How the input data should be interpreted.
     valueInputOption: 'USER_ENTERED',  // TODO: Update placeholder value.
