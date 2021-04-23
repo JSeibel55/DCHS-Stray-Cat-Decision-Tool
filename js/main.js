@@ -96,13 +96,13 @@ function createMap(){
         attribution: '<a href="https://www.mapbox.com/">Mapbox</a>',
         accessToken: 'pk.eyJ1IjoianNlaWJlbDU1IiwiYSI6ImNrNmpxc3pzYTAwZXIzanZ4Nm5scHAzam0ifQ.5NLBHlevG0PL-E13Yax9NA'
     });
-    var openStreetsGrayBasemap = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-    }).addTo(map);
-    // var mapboxGray = L.tileLayer('https://api.mapbox.com/styles/v1/jseibel55/ckmp4sj560qfq17o1bbt4sglv/tiles/256/{z}/{x}/{y}@2x?access_token={accessToken}', {
-    //     attribution: '<a href="https://www.mapbox.com/">Mapbox</a>',
-    //     accessToken: 'pk.eyJ1IjoianNlaWJlbDU1IiwiYSI6ImNrNmpxc3pzYTAwZXIzanZ4Nm5scHAzam0ifQ.5NLBHlevG0PL-E13Yax9NA'
+    // var openStreetsGrayBasemap = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+    //     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
     // }).addTo(map);
+    var mapboxGray = L.tileLayer('https://api.mapbox.com/styles/v1/jseibel55/ckmp4sj560qfq17o1bbt4sglv/tiles/256/{z}/{x}/{y}@2x?access_token={accessToken}', {
+        attribution: '<a href="https://www.mapbox.com/">Mapbox</a>',
+        accessToken: 'pk.eyJ1IjoianNlaWJlbDU1IiwiYSI6ImNrNmpxc3pzYTAwZXIzanZ4Nm5scHAzam0ifQ.5NLBHlevG0PL-E13Yax9NA'
+    }).addTo(map);
     var satelliteBasemap =  L.tileLayer('https://api.mapbox.com/styles/v1/jseibel55/ckmqrltte1dsx17p96o9gwkgs/tiles/256/{z}/{x}/{y}@2x?access_token={accessToken}', {
         attribution: '<a href="https://www.mapbox.com/">Mapbox</a>',
         accessToken: 'pk.eyJ1IjoianNlaWJlbDU1IiwiYSI6ImNrNmpxc3pzYTAwZXIzanZ4Nm5scHAzam0ifQ.5NLBHlevG0PL-E13Yax9NA'
@@ -111,8 +111,8 @@ function createMap(){
     // //Create basemap group for control panel
 	var basemaps = {
         'Streets Color': mapboxColor,
-        'Streets Gray': openStreetsGrayBasemap,
-        // 'Streets Gray': mapboxGray,
+        // 'Streets Gray': openStreetsGrayBasemap,
+        'Streets Gray': mapboxGray,
         'Satellite': satelliteBasemap,
     }
     var overlays = {};
@@ -515,11 +515,11 @@ function reportAssessment() {
     $('body').append('<div class="results-collapsed" onclick="toggleResults()">Show Assessment</div>')
     
     if (areasWithin400.length > 0) {
-        $('.results-table').append('<span style="text-decoration: underline">Areas within 400 meters (~0.25 miles):</span><br>');
+        $('.results-table').append('<span id="results-distance">Areas within 400 meters (~0.25 miles)</span><br>');
         createResultsTable(areasWithin400);
     }
     if (areasWithin1200.length > 0) {
-        $('.results-table').append('<br><span style="text-decoration: underline">Areas within 1200 meters (~0.75 miles):</span><br>');
+        $('.results-table').append('<br><span id="results-distance">Areas within 1200 meters (~0.75 miles)</span><br>');
         createResultsTable(areasWithin1200);
     }
 

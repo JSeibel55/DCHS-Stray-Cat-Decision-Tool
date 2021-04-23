@@ -221,7 +221,7 @@ input:checked + .slider:before {
   text-align: center;
 }
 #wrapper-top .closebtn {
-  float:right;
+  float: right;
   margin: 0;
   padding: 0.2em;
   font-size: 2em;
@@ -233,6 +233,10 @@ input:checked + .slider:before {
 .results-table {
   max-height: 30vh;
   overflow: auto;
+}
+#results-distance {
+  text-decoration: underline;
+  font-size: 1.5rem;
 }
 th, td, p, input {
   font: 14px Verdana;
@@ -248,7 +252,7 @@ table, th, td
   text-align: center;
 }
 th {
-  font-weight:bold;
+  font-weight: bold;
 }
 
 /* Popup Info */
@@ -376,6 +380,13 @@ th {
     -webkit-transform: rotate(360deg);
     transform: rotate(360deg);
   }
+}
+
+#about-screen-content {
+  background-color: #ececec;
+}
+#about-screen-content .modal-header {
+  border-bottom: 1px solid #86888a;
 }
 
 /* Modal that activates if user is on mobile device*/
