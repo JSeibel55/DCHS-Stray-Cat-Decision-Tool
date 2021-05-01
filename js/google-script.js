@@ -79,9 +79,9 @@ function get() {
 }
 
 function initClient() {
-  var API_KEY = 'AIzaSyCIn5QKQ5Lrxori6s3JdOa6HrMaZ-V2csQ';  // TODO: Update placeholder with desired API key.
+  var API_KEY = 'AIzaSyCPK1bbyQBUcK-779Ofx-2rDXgGO0-A3fs';  // TODO: Update placeholder with desired API key.
 
-  var CLIENT_ID = '932350423623-67h32k723eilu87sltovvk5reklceb6g.apps.googleusercontent.com';  // TODO: Update placeholder with desired client ID.
+  var CLIENT_ID = '618935749332-qg2g5pgurasqhqhb26ld8ls8aqs0ko1g.apps.googleusercontent.com';  // TODO: Update placeholder with desired client ID.
 
   // TODO: Authorize using one of the following scopes:
   //   'https://www.googleapis.com/auth/drive'
